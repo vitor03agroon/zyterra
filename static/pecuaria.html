@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pecuária — ZyTerra</title>
+
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+      .ia-box {
+        margin-top: 15px;
+        padding: 20px;
+        border-left: 5px solid #163b63;
+        background: #f6f8fb;
+        border-radius: 4px;
+      }
+
+      .categoria {
+        font-weight: bold;
+        color: #163b63;
+        margin-bottom: 10px;
+      }
+
+      .spinner {
+        border: 4px solid #eee;
+        border-top: 4px solid #163b63;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        animation: spin 1s linear infinite;
+        margin: 10px auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .markdown-body {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="/static/icons/zyterra-logo.svg" alt="ZyTerra" />
+        <span>ZyTerra</span>
+      </div>
+
+      <nav class="menu">
+        <a href="/">Painel</a>
+        <a href="/culturas">Culturas</a>
+        <a href="/analises">Análises</a>
+        <a class="active" href="/pecuaria">Pecuária</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <h1>Pecuária — IA Experimental</h1>
+
+      <p>
+        Utilize o ZyTerra para compreender causas comuns e boas práticas na
+        pecuária. As respostas têm caráter educativo.
+      </p>
+
+      <div class="card">
+        <textarea
+          id="pergunta"
+          rows="4"
+          style="width: 100%"
+          placeholder="Ex: Estresse por calor prejudica o gado?"
+        ></textarea>
+        <br /><br />
+        <button id="btn-enviar" onclick="perguntarIA()">Perguntar</button>
+      </div>
+
+      <div class="card ia-box" id="respostaBox" style="display: none">
+        <div id="categoria" class="categoria"></div>
+        <div id="textoResposta" class="markdown-body"></div>
+      </div>
+    </main>
+
+    <script>
+      function perguntarIA() {
+        const pergunta = document.getElementById("pergunta").value.trim();
+        const btn = document.getElementById("btn-enviar");
+        const box = document.getElementById("respostaBox");
+        const texto = document.getElementById("textoResposta");
+        const categoria = document.getElementById("categoria");
+
+        if (!pergunta) {
+          alert("Digite uma pergunta.");
+          return;
+        }
+
+        box.style.display = "block";
+        categoria.innerText = "";
+        texto.innerHTML = `<div class="spinner"></div><p>Processando...</p>`;
+        btn.disabled = true;
+
+        fetch(`${window.location.origin}/api/ia/pecuaria`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pergunta }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            categoria.innerText = "Categoria: " + (data.categoria || "—");
+            texto.innerHTML = marked.parse(data.resposta || "");
+          })
+          .catch(() => {
+            texto.innerHTML = "<p>Erro ao comunicar com o sistema.</p>";
+          })
+          .finally(() => {
+            btn.disabled = false;
+          });
+      }
+    </script>
+  </body>
+</html>

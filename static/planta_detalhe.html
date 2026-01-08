@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Detalhes da Planta — ZyTerra (embedded)</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#e9f1fb; margin:0; padding:0; }
+    .container { max-width:900px; margin:30px auto; background:#fff; padding:26px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+    .foto{ width:100%; max-height:260px; object-fit:cover; border-radius:8px; margin-bottom:20px;}
+    h1{ color:#163b6b; font-size:30px; margin:6px 0 12px;}
+    h2{ color:#163b6b; margin-top:18px; font-size:18px;}
+    .item{ margin-bottom:10px; font-size:16px; color:#222;}
+    .infoBox{ background:#f7f9fc; padding:10px; border-radius:8px; margin-bottom:12px; color:#333; }
+    .error{ background:#fff3f3; border:1px solid #f5c2c2; color:#8a1f1f; padding:10px; border-radius:6px; margin-bottom:12px; }
+    .btn-voltar{ display:inline-block; margin-top:16px; padding:10px 14px; background:#163b6b; color:#fff; text-decoration:none; border-radius:6px;}
+    .small{ font-size:13px; color:#666; margin-top:6px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="diagnostic" class="infoBox small">Carregando dados embutidos…</div>
+
+    <img id="foto" class="foto" src="" alt="Imagem da planta" style="display:none" />
+
+    <h1 id="nome">—</h1>
+    <div class="item" id="nome_cientifico"></div>
+    <div class="item"><strong>Tipo:</strong> <span id="tipo"></span></div>
+
+    <h2>Identificação</h2>
+    <div class="item" id="identificacao"></div>
+
+    <h2>Ciclo Biológico</h2>
+    <div class="item" id="ciclo"></div>
+
+    <h2>Época de Maior Incidência</h2>
+    <div class="item" id="epoca"></div>
+
+    <h2>Janela Crítica de Controle</h2>
+    <div class="item" id="janela"></div>
+
+    <h2>Competição com Culturas</h2>
+    <div class="item" id="competicao"></div>
+
+    <h2>Manejo Integrado</h2>
+    <div class="item" id="manejo"></div>
+
+    <h2>Herbicidas Recomendados</h2>
+    <div class="item" id="herbicidas"></div>
+
+    <h2>Resistência Conhecida</h2>
+    <div class="item" id="resistencia"></div>
+
+    <a href="plantas_daninhas.html" class="btn-voltar">← Voltar</a>
+    <div id="errorArea" style="margin-top:18px"></div>
+  </div>
+
+  <script>
+  (function(){
+    // --- DADOS EMBUTIDOS (copiados do JSON final que te enviei) ---
+    const DB = [
+      {
+        "id": "capim-amargoso",
+        "nome": "Capim-amargoso",
+        "nome_cientifico": "Digitaria insularis",
+        "tipo": "Gramínea",
+        "foto": "https://upload.wikimedia.org/wikipedia/commons/2/25/Digitaria_insularis.jpg",
+        "identificacao": "Gramínea perene, folhas pilosas, entouceiramento vigoroso e rizomas curtos. Apresenta forte capacidade de rebrota.",
+        "ciclo": "Perene",
+        "epoca": "Alta incidência da primavera ao verão.",
+        "janela_controle": "Plantas jovens antes de perfilhamento.",
+        "competicao": "Pode reduzir a produtividade de soja e milho em até 40%.",
+        "manejo": "Dessecação sequencial em pré-plantio, rotação de culturas, controle precoce e evitar falhas no plantio direto.",
+        "herbicidas": "Cletodim + Glifosato, Haloxyfop, Imazapyr (pré-emergência).",
+        "resistencia": "Ampla resistência a glifosato confirmada no Brasil."
+      },
+      {
+        "id": "buva",
+        "nome": "Buva",
+        "nome_cientifico": "Conyza spp.",
+        "tipo": "Folha larga",
+        "foto": "https://upload.wikimedia.org/wikipedia/commons/6/69/Conyza_canadensis.jpg",
+        "identificacao": "Folhas alongadas, formato ereto e roseta basal muito característica.",
+        "ciclo": "Anual-bianual",
+        "epoca": "Outono e inverno.",
+        "janela_controle": "Plantas jovens em roseta.",
+        "competicao": "Altamente agressiva e dominante em semeadura direta.",
+        "manejo": "Dessecação sequencial; evitar plantio com plantas adultas.",
+        "herbicidas": "Glifosato + 2,4-D, Dicamba, Metsulfuron.",
+        "resistencia": "Resistente a glifosato e ALS."
+      },
+      {
+        "id": "tiririca",
+        "nome": "Tiririca",
+        "nome_cientifico": "Cyperus rotundus",
+        "tipo": "Ciperácea",
+        "foto": "https://upload.wikimedia.org/wikipedia/commons/9/92/Cyperus_rotundus.jpg",
+        "identificacao": "Folhas triangulares, sistema subterrâneo com tubérculos numerosos.",
+        "ciclo": "Perene",
+        "epoca": "Ano inteiro.",
+        "janela_controle": "Melhor controle no início da infestação.",
+        "competicao": "Extremamente agressiva e persistente.",
+        "manejo": "Evitar controle mecânico; preferir manejo químico repetido.",
+        "herbicidas": "Halosulfuron, Imazapyr, Clomazone.",
+        "resistencia": "Relatos internacionais de resistência."
+      },
+      {
+        "id": "caruru",
+        "nome": "Caruru",
+        "nome_cientifico": "Amaranthus viridis",
+        "tipo": "Folha larga",
+        "foto": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Amaranthus_viridis.jpg",
+        "identificacao": "Folhas ovais verde-escuras, crescimento muito rápido.",
+        "ciclo": "Anual",
+        "epoca": "Primavera e verão.",
+        "janela_controle": "Até 10 cm de altura.",
+        "competicao": "Alta interferência, principalmente em milho.",
+        "manejo": "Uso de pré-emergentes fortes e controle precoce.",
+        "herbicidas": "Atrazina, Flumioxazin, 2,4-D.",
+        "resistencia": "Casos de resistência a ALS."
+      }
+      // (adicionei apenas alguns itens essenciais para teste rápido; o JSON completo tem todos)
+    ];
+
+    // --- lógica ---
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const diag = document.getElementById('diagnostic');
+    const errArea = document.getElementById('errorArea');
+
+    if(!id){
+      errArea.innerHTML = '<div class="error"><strong>Erro:</strong> parâmetro id ausente. Use ?id=capim-amargoso</div>';
+      diag.innerText = 'Parâmetro id ausente.';
+      return;
+    }
+
+    diag.innerText = `Carregando dados (embedded) para: ${id}`;
+
+    const planta = DB.find(p=>p.id === id);
+    if(!planta){
+      errArea.innerHTML = `<div class="error"><strong>Erro:</strong> Planta com id="${id}" não encontrada no DB embutido. IDs disponíveis: ${DB.map(x=>x.id).join(', ')}</div>`;
+      diag.innerText = 'Planta não encontrada no DB embutido.';
+      return;
+    }
+
+    // preenche campos
+    function setText(idElem, text){ const el=document.getElementById(idElem); if(el) el.innerText = text || '—'; }
+    setText('nome', planta.nome);
+    setText('nome_cientifico', `Nome científico: ${planta.nome_cientifico || '—'}`);
+    setText('tipo', planta.tipo);
+    setText('identificacao', planta.identificacao);
+    setText('ciclo', planta.ciclo);
+    setText('epoca', planta.epoca);
+    setText('janela', planta.janela_controle || planta.janela || '—');
+    setText('competicao', planta.competicao || '—');
+    setText('manejo', planta.manejo || '—');
+    setText('herbicidas', planta.herbicidas || '—');
+    setText('resistencia', planta.resistencia || '—');
+
+    const fotoEl = document.getElementById('foto');
+    if(planta.foto){
+      fotoEl.src = planta.foto;
+      fotoEl.style.display = '';
+    }
+    diag.innerText = `Dados exibidos (embedded) para: ${planta.nome}`;
+
+  })();
+  </script>
+</body>
+</html>

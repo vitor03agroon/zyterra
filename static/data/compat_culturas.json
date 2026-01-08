@@ -1,0 +1,15 @@
+{
+    "soja": {
+      "permitidos": ["Glifosato 480", "Tebuconazol 200 EC", "Lambda-Cialotrina 50 EC"],
+      "nao_permitidos": ["Atrazina 500 SC"]
+    },
+    "milho": {
+      "permitidos": ["Atrazina 500 SC", "Lambda-Cialotrina 50 EC"],
+      "nao_permitidos": ["Glifosato 480"]
+    },
+    "feijao": {
+      "permitidos": ["Tebuconazol 200 EC", "Lambda-Cialotrina 50 EC"],
+      "nao_permitidos": ["Atrazina 500 SC"]
+    }
+  }
+  

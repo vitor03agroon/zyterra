@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZyTerra - Painel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      background: #f2f6f9;
+      text-align: center;
+    }
+
+    h1 {
+      color: #1a3d6f;
+      margin-bottom: 20px;
+      font-size: 34px;
+    }
+
+    /* 🔵 BARRA GLOBAL DE NAVEGAÇÃO */
+    .topnav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 30px auto;
+      flex-wrap: wrap;
+    }
+    .topnav button {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid #d0d7e2;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .topnav button:hover {
+      background: #163b63;
+      color: white;
+    }
+
+    /* CARDS DO PAINEL */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 10px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .card {
+      background: #fff;
+      padding: 28px 10px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(20,40,80,0.06);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      user-select: none;
+    }
+    .card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 12px 28px rgba(20,40,80,0.08); 
+    }
+    .emoji { font-size: 44px; }
+    .label { margin-top: 12px; font-size: 18px; color:#17324a; font-weight:700; }
+
+  </style>
+</head>
+<body>
+
+  <h1>🌱 ZyTerra – Painel Principal</h1>
+
+  <!-- 🔵 BARRA GLOBAL DE NAVEGAÇÃO -->
+  <div class="topnav">
+    <button onclick="window.location.href='/'">Painel</button>
+    <button onclick="window.location.href='/culturas'">Culturas</button>
+    <button onclick="window.location.href='/insumos'">Insumos Agrícolas</button>
+    <button onclick="window.location.href='/pecuaria'">Pecuária</button>
+    <button onclick="window.location.href='/plantas-daninhas'">Plantas Daninhas</button>
+  </div>
+
+  <div class="grid">
+
+    <!-- CULTURAS -->
+    <div class="card" onclick="location.href='/culturas'">
+      <div class="emoji">🌱</div>
+      <div class="label">Culturas</div>
+    </div>
+
+    <!-- PLANTAS DANINHAS -->
+    <div class="card" onclick="location.href='/plantas-daninhas'">
+      <div class="emoji">🪴</div>
+      <div class="label">Plantas daninhas</div>
+    </div>
+
+    <!-- ANÁLISES -->
+    <div class="card" onclick="location.href='/analises'">
+      <div class="emoji">📊</div>
+      <div class="label">Análises</div>
+    </div>
+
+    <!-- INSUMOS AGRÍCOLAS -->
+    <div class="card" onclick="location.href='/insumos'">
+      <div class="emoji">🧪</div>
+      <div class="label">Insumos agrícolas</div>
+    </div>
+
+    <!-- MÁQUINAS -->
+    <div class="card" onclick="alert('Em breve: Máquinas')">
+      <div class="emoji">🚜</div>
+      <div class="label">Máquinas</div>
+    </div>
+
+    <!-- ANIMAIS -->
+    <div class="card" onclick="location.href='/animais'">
+      <div class="emoji">🐄</div>
+      <div class="label">Animais</div>
+    </div>
+
+    <!-- FERRAMENTAS -->
+    <div class="card" onclick="alert('Em breve: Ferramentas')">
+      <div class="emoji">🧰</div>
+      <div class="label">Ferramentas</div>
+    </div>
+
+    <!-- PECUÁRIA -->
+    <div class="card" onclick="location.href='/pecuaria'">
+      <div class="emoji">P</div>
+      <div class="label">Pecuária</div>
+    </div>
+
+  </div>
+</body>
+</html>

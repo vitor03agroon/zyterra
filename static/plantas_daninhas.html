@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Plantas Daninhas — ZyTerra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #e9f1fb;
+    }
+
+    .container {
+      padding: 30px 40px;
+    }
+
+    h1 {
+      color: #163b6b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .card-type {
+      font-size: 15px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🌿 Plantas Daninhas</h1>
+
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Buscar planta...">
+    </div>
+
+    <div class="grid" id="plantGrid"></div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const plantas = [
+      { id: "capim-amargoso", nome: "Capim-amargoso", tipo: "Gramínea" },
+      { id: "capim-pe-de-galinha", nome: "Capim-pé-de-galinha", tipo: "Gramínea" },
+      { id: "capim-colchao", nome: "Capim-colchão", tipo: "Gramínea" },
+      { id: "capim-carrapicho", nome: "Capim-carrapicho", tipo: "Gramínea" },
+      { id: "buva", nome: "Buva", tipo: "Folha larga" },
+      { id: "tiririca", nome: "Tiririca", tipo: "Ciperácea" },
+      { id: "caruru", nome: "Caruru", tipo: "Folha larga" },
+      { id: "caruru-roxo", nome: "Caruru-roxo", tipo: "Folha larga" },
+      { id: "picao-preto", nome: "Picão-preto", tipo: "Folha larga" },
+      { id: "losna-branca", nome: "Losna-branca", tipo: "Folha larga" },
+      { id: "guaxuma", nome: "Guaxuma", tipo: "Perene" },
+      { id: "trapoeraba", nome: "Trapoeraba", tipo: "Folha larga" },
+      { id: "cordao-de-viola", nome: "Cordão-de-viola", tipo: "Folha larga" }
+    ];
+
+    const grid = document.getElementById("plantGrid");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderList(filtro = "") {
+      grid.innerHTML = "";
+
+      plantas
+        .filter(p => p.nome.toLowerCase().includes(filtro.toLowerCase()))
+        .forEach(p => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="card-title">${p.nome}</div>
+            <div class="card-type">${p.tipo}</div>
+          `;
+
+          card.onclick = () => {
+            window.location.href = "planta_detalhe.html?id=" + encodeURIComponent(p.id);
+          };
+
+          grid.appendChild(card);
+        });
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      renderList(e.target.value);
+    });
+
+    renderList();
+  });
+  </script>
+</body>
+</html>

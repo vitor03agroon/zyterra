@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZyTerra – Culturas</title>
+  <style>
+    :root { --zy-blue:#163b63; --page-bg:#eef4fb }
+
+    body {
+      margin:0; background:var(--page-bg);
+      font-family:Arial; display:flex;
+    }
+
+    .sidebar {
+      width:240px; background:var(--zy-blue); color:#fff;
+      height:100vh; position:fixed; left:0; top:0;
+      padding:22px; display:flex; flex-direction:column;
+    }
+    .sidebar a {
+      color:#fff; text-decoration:none; padding:10px;
+      border-radius:8px; margin-bottom:8px; display:block;
+    }
+
+    .main {
+      margin-left:240px; padding:30px;
+      width:calc(100% - 240px);
+    }
+
+    .title {
+      color:var(--zy-blue); font-size:26px;
+      text-align:center; margin-bottom:12px;
+    }
+
+    .search {
+      display:block; margin:0 auto 20px auto;
+      padding:10px; border-radius:8px;
+      border:1px solid #cbd8e6; max-width:380px;
+    }
+
+    /* Barra de categorias */
+    .cats {
+      display:flex; gap:10px; justify-content:center;
+      margin-bottom:20px; flex-wrap:wrap;
+    }
+    .cat-btn {
+      padding:8px 16px; background:white;
+      border-radius:20px; cursor:pointer;
+      border:1px solid #c7d3e5;
+      font-size:14px;
+    }
+    .cat-btn.active {
+      background:var(--zy-blue); color:white;
+      border-color:var(--zy-blue);
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:18px; max-width:900px; margin:auto;
+    }
+
+    .card {
+      background:#fff; padding:18px; border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      text-align:center; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>🌾 ZyTerra</h2>
+  <a href="/">🏠 Painel</a>
+  <a href="/culturas">🌱 Culturas</a>
+  <a href="/insumos">🧪 Insumos Agrícolas</a>
+  <a href="/pecuaria">🐄 Pecuária</a>
+  <a href="/analises">📊 Análises</a>
+  <a href="/plantas-daninhas">🌿 Plantas Daninhas</a>
+</div>
+
+<div class="main">
+  <div class="title">Culturas Agrícolas</div>
+
+  <!-- CAMPO DE BUSCA -->
+  <input id="search" class="search" placeholder="Buscar cultura...">
+
+  <!-- CATEGORIAS -->
+  <div class="cats" id="cats"></div>
+
+  <!-- GRID DE CULTURAS -->
+  <div id="grid" class="grid"></div>
+</div>
+
+<script>
+/*
+  Código robusto para carregar culturas.json e normalizar categorias.
+  - aceita campo c.cat ou c.categoria vindo do JSON
+  - normaliza acentos e mapeia para as chaves de filtro usadas na UI
+  - mantém click nos cards para /cultura?nome=slug
+*/
+
+let culturas = [];
+let categoriaSelecionada = "todas";
+
+/* Chaves / rótulos mostrados na UI */
+const categorias = {
+  todas: "Todas",
+  graos: "Grãos",
+  hortalicas: "Hortaliças",
+  frutiferas: "Frutíferas",
+  forrageiras: "Forrageiras",
+  oleaginosas: "Oleaginosas",
+  leguminosas: "Leguminosas",
+  cafeicultura: "Cafeicultura"
+};
+
+/* Mapeamento de termos possíveis no JSON para as chaves acima */
+const mapaCategorias = {
+  // variações comuns (com e sem acento)
+  "graos": "graos",
+  "grãos": "graos",
+  "grao": "graos",
+  "grão": "graos",
+  "hortalicas": "hortalicas",
+  "hortaliças": "hortalicas",
+  "hortaliça": "hortalicas",
+  "frutiferas": "frutiferas",
+  "frutíferas": "frutiferas",
+  "fruticultura": "frutiferas",
+  "forrageiras": "forrageiras",
+  "forrageira": "forrageiras",
+  "oleaginosas": "oleaginosas",
+  "oleaginosa": "oleaginosas",
+  "leguminosas": "leguminosas",
+  "leguminosa": "leguminosas",
+  "cafeicultura": "cafeicultura",
+  "cafe": "cafeicultura",
+  "cana": "forrageiras",
+  "graos/gramineas": "graos",
+  // english or other variants fallback to 'todas'
+};
+
+/* Normaliza um texto removendo acentos e transformando para minúsculas */
+function normalize(text) {
+  if (!text) return "";
+  return text.toString().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/* Retorna a chave padronizada (ex: 'graos') a partir do campo do JSON */
+function mapCategoriaOriginal(catRaw) {
+  if (!catRaw) return "todas";
+  const n = normalize(catRaw);
+  // tenta match exato no mapa
+  if (mapaCategorias[n]) return mapaCategorias[n];
+  // tentativas simples:
+  if (n.includes('grao') || n.includes('gram')) return 'graos';
+  if (n.includes('hort') || n.includes('verd')) return 'hortalicas';
+  if (n.includes('frut')) return 'frutiferas';
+  if (n.includes('oleag')) return 'oleaginosas';
+  if (n.includes('forrag') || n.includes('sorgo') || n.includes('cana')) return 'forrageiras';
+  if (n.includes('legu') || n.includes('feijao') || n.includes('soja')) return 'leguminosas';
+  if (n.includes('cafe')) return 'cafeicultura';
+  return 'todas';
+}
+
+/* Carrega JSON e normaliza cada item para ter: slug, nome, cat (padronizado) */
+async function carregarCulturas() {
+  try {
+    const resp = await fetch("/static/data/culturas.json", {cache: "no-store"});
+    culturas = await resp.json();
+
+    // normaliza cada item para garantir compatibilidade
+    culturas = culturas.map(c => {
+      const catFromObj = c.cat || c.categoria || c.categoriaOriginal || "";
+      const catPad = mapCategoriaOriginal(catFromObj);
+      return Object.assign({}, c, { cat: catPad });
+    });
+
+    montarCategorias();
+    renderizar();
+  } catch (err) {
+    console.error("Erro ao carregar culturas.json:", err);
+    document.getElementById("grid").innerHTML = "<div style='text-align:center;color:#666'>Erro ao carregar dados. Verifique /static/data/culturas.json</div>";
+  }
+}
+
+function montarCategorias() {
+  const div = document.getElementById("cats");
+  div.innerHTML = "";
+
+  for (const key in categorias) {
+    const btn = document.createElement("div");
+    btn.className = "cat-btn" + (key === "todas" ? " active" : "");
+    btn.innerText = categorias[key];
+    btn.dataset.cat = key;
+    btn.onclick = () => {
+      categoriaSelecionada = key;
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderizar();
+    };
+    div.appendChild(btn);
+  }
+}
+
+function renderizar() {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  const busca = document.getElementById("search").value.toLowerCase();
+
+  const lista = culturas.filter(c => {
+    // nome
+    const matchBusca = !busca || (c.nome && c.nome.toLowerCase().includes(busca)) || (c.slug && c.slug.toLowerCase().includes(busca));
+    // categoria: c.cat já normalizada para as chaves (graos, hortalicas...)
+    const matchCat = categoriaSelecionada === "todas" || (c.cat && c.cat === categoriaSelecionada);
+    return matchBusca && matchCat;
+  });
+
+  if (!lista.length) {
+    grid.innerHTML = "<div style='text-align:center;color:#666;padding:18px;background:white;border-radius:12px'>Nenhuma cultura encontrada.</div>";
+    return;
+  }
+
+  lista.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = c.nome;
+    // segurança: se não houver slug, não quebra — usa nome como fallback
+    const slug = c.slug || c.nome.replace(/\s+/g,'-').toLowerCase();
+    card.onclick = () => window.location.href = `/cultura?nome=${encodeURIComponent(slug)}`;
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("search").addEventListener("input", renderizar);
+
+/* inicializa */
+carregarCulturas();
+</script>
+
+</body>
+</html>

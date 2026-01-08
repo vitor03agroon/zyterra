@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Detalhes do Insumo — ZyTerra</title>
+
+<style>
+  body {
+    background: #f2f6f9;
+    margin: 0;
+    font-family: Arial;
+  }
+  .main {
+    margin-left: 240px;
+    padding: 40px;
+  }
+  h1 {
+    color: #163b63;
+  }
+  .box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 700px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+  <h1>Detalhes do Insumo</h1>
+  <div id="conteudo" class="box"></div>
+</div>
+
+<script src="/static/js/script_insumos.js"></script>
+
+<script>
+// sidebar
+fetch("/static/layout/sidebar.html")
+  .then(r => r.text())
+  .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+</script>
+
+</body>
+</html>

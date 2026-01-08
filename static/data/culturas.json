@@ -1,0 +1,192 @@
+[
+    {
+      "nome": "Soja",
+      "slug": "soja",
+      "categoria": "graos",
+      "clima": {
+        "chuva": "450–850 mm",
+        "sensibilidade": "sensível à falta de água no florescimento"
+      },
+      "adubacao": {
+        "n": "Fixação biológica (inoculação)",
+        "p2o5": "60–120 kg/ha",
+        "k2o": "60–100 kg/ha"
+      },
+      "pragas": ["Lagarta-da-soja", "Percevejo-marrom"],
+      "doencas": ["Ferrugem-asiática", "Mofo-branco"],
+      "descricao": "Cultura anual amplamente utilizada na produção de grãos e óleo.",
+      "imagem": "/static/img/culturas/soja.png"
+    },
+  
+    {
+      "nome": "Milho",
+      "slug": "milho",
+      "categoria": "graos",
+      "clima": {
+        "chuva": "500–900 mm",
+        "sensibilidade": "sensível à estiagem no pendoamento"
+      },
+      "adubacao": {
+        "n": "120–200 kg/ha",
+        "p2o5": "60–120 kg/ha",
+        "k2o": "80–150 kg/ha"
+      },
+      "pragas": ["Lagarta-do-cartucho", "Pulgão"],
+      "doencas": ["Cercosporiose", "Enfezamento"],
+      "descricao": "Cereal amplamente cultivado para alimentação humana e animal.",
+      "imagem": "/static/img/culturas/milho.png"
+    },
+  
+    {
+      "nome": "Feijão",
+      "slug": "feijao",
+      "categoria": "leguminosas",
+      "clima": {
+        "chuva": "300–600 mm",
+        "sensibilidade": "sensível ao encharcamento"
+      },
+      "adubacao": {
+        "n": "20–40 kg/ha",
+        "p2o5": "60–120 kg/ha",
+        "k2o": "40–90 kg/ha"
+      },
+      "pragas": ["Mosca-branca", "Ácaros"],
+      "doencas": ["Antracnose", "Míldio"],
+      "descricao": "Leguminosa essencial na alimentação brasileira.",
+      "imagem": "/static/img/culturas/feijao.png"
+    },
+  
+    {
+      "nome": "Arroz",
+      "slug": "arroz",
+      "categoria": "graos",
+      "clima": {
+        "chuva": "800–1600 mm",
+        "sensibilidade": "sensível à seca prolongada"
+      },
+      "adubacao": {
+        "n": "60–120 kg/ha",
+        "p2o5": "40–80 kg/ha",
+        "k2o": "40–80 kg/ha"
+      },
+      "pragas": ["Bicheira", "Percevejo-do-arroz"],
+      "doencas": ["Brusone", "Mancha-parda"],
+      "descricao": "Cereal amplamente cultivado em áreas irrigadas ou de várzea.",
+      "imagem": "/static/img/culturas/arroz.png"
+    },
+  
+    {
+      "nome": "Alface",
+      "slug": "alface",
+      "categoria": "hortalicas",
+      "clima": {
+        "chuva": "300–600 mm",
+        "sensibilidade": "sensível ao calor excessivo"
+      },
+      "adubacao": {
+        "n": "60–100 kg/ha",
+        "p2o5": "80–150 kg/ha",
+        "k2o": "80–150 kg/ha"
+      },
+      "pragas": ["Pulgões", "Lagartas"],
+      "doencas": ["Míldio", "Pendoamento precoce"],
+      "descricao": "Hortaliça folhosa amplamente consumida e de ciclo rápido.",
+      "imagem": "/static/img/culturas/alface.png"
+    },
+  
+    {
+      "nome": "Cenoura",
+      "slug": "cenoura",
+      "categoria": "hortalicas",
+      "clima": {
+        "chuva": "350–600 mm",
+        "sensibilidade": "sensível a solos compactados"
+      },
+      "adubacao": {
+        "n": "80–120 kg/ha",
+        "p2o5": "100–180 kg/ha",
+        "k2o": "100–180 kg/ha"
+      },
+      "pragas": ["Mosca-das-sementes", "Pulgões"],
+      "doencas": ["Alternaria", "Queima-das-folhas"],
+      "descricao": "Raiz tuberosa muito cultivada no Brasil em diversas regiões.",
+      "imagem": "/static/img/culturas/cenoura.png"
+    },
+  
+    {
+      "nome": "Café",
+      "slug": "cafe",
+      "categoria": "cafeicultura",
+      "clima": {
+        "chuva": "1200–1800 mm",
+        "sensibilidade": "moderada à geada"
+      },
+      "adubacao": {
+        "n": "100–150 kg/ha",
+        "p2o5": "80–120 kg/ha",
+        "k2o": "120–180 kg/ha"
+      },
+      "pragas": ["Bicho-mineiro", "Broca-do-café"],
+      "doencas": ["Ferrugem", "Antracnose"],
+      "descricao": "Cultura perene de importância econômica com manejo específico.",
+      "imagem": "/static/img/culturas/cafe.png"
+    },
+  
+    {
+      "nome": "Abacate",
+      "slug": "abacate",
+      "categoria": "frutiferas",
+      "clima": {
+        "chuva": "1200–1600 mm",
+        "sensibilidade": "moderada à estiagem"
+      },
+      "adubacao": {
+        "n": "80–120 kg/ha",
+        "p2o5": "60–90 kg/ha",
+        "k2o": "100–160 kg/ha"
+      },
+      "pragas": ["Ácaros", "Mosca-das-frutas"],
+      "doencas": ["Antracnose"],
+      "descricao": "Frutífera resistente, adaptada a diversas regiões tropicais.",
+      "imagem": "/static/img/culturas/abacate.png"
+    },
+  
+    {
+      "nome": "Cana-de-açúcar",
+      "slug": "cana",
+      "categoria": "forrageiras",
+      "clima": {
+        "chuva": "1000–1500 mm",
+        "sensibilidade": "resistente à seca moderada"
+      },
+      "adubacao": {
+        "n": "100–140 kg/ha",
+        "p2o5": "60–90 kg/ha",
+        "k2o": "80–160 kg/ha"
+      },
+      "pragas": ["Broca-da-cana", "Sphenophorus"],
+      "doencas": ["Ferrugem-alaranjada", "Carvão"],
+      "descricao": "Cultura de grande produção de biomassa para açúcar, etanol e forragem.",
+      "imagem": "/static/img/culturas/cana.png"
+    },
+  
+    {
+      "nome": "Sorgo",
+      "slug": "sorgo",
+      "categoria": "forrageiras",
+      "clima": {
+        "chuva": "300–600 mm",
+        "sensibilidade": "alta resistência à seca"
+      },
+      "adubacao": {
+        "n": "80–120 kg/ha",
+        "p2o5": "40–100 kg/ha",
+        "k2o": "60–120 kg/ha"
+      },
+      "pragas": ["Mosca-do-sorgo", "Lagartas"],
+      "doencas": ["Antracnose", "Ferrugem"],
+      "descricao": "Extremamente resistente, ideal para regiões secas.",
+      "imagem": "/static/img/culturas/sorgo.png"
+    }
+  ]
+  

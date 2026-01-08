@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Animal — ZyTerra (IA Avançada + Integração Insumos)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    :root{--zy-blue:#163b63;--card-bg:#fff;--page-bg:#eef4fb}
+    body{font-family:Arial;background:var(--page-bg);margin:0}
+    .header{background:var(--zy-blue);color:#fff;padding:14px 0;text-align:center;font-weight:700}
+    .content{max-width:980px;margin:18px auto;padding:18px}
+    .card{background:var(--card-bg);border-radius:10px;padding:14px;box-shadow:0 8px 20px rgba(20,40,80,0.06);margin-bottom:14px}
+    h2{color:var(--zy-blue);margin:0 0 8px 0}
+    label{font-weight:700}
+    .result{background:#f7fbff;padding:12px;border-radius:8px;border:1px solid rgba(20,40,80,0.04);margin-top:8px}
+    .btn-zy{background:var(--zy-blue);color:white;border:none;padding:8px 14px;border-radius:8px}
+    .inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .small{font-size:13px;color:#0f2f4d}
+    pre{white-space:pre-wrap}
+    .tag{display:inline-block;padding:4px 8px;border-radius:8px;background:#f0f6ff;color:var(--zy-blue);font-weight:700;margin-right:6px;margin-top:6px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+    .warn{color:#a33;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="header">🐾 ZyTerra — IA Zootécnica + Insumos</div>
+  <div class="content">
+
+    <!-- Top summary -->
+    <div class="card" id="top-block">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <h2 id="animal-title">Sistema / Animal</h2>
+          <div id="animal-sub" class="small">Use a lista de sistemas para abrir um item.</div>
+        </div>
+        <div style="text-align:right">
+          <a href="/animal-lista" style="color:var(--zy-blue);text-decoration:none">← Voltar</a>
+        </div>
+      </div>
+
+      <div id="basic-facts" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Ficha + integração com culturas -->
+    <div class="card" id="zoo-data">
+      <h3>📘 Ficha zootécnica & Culturas para alimentação</h3>
+      <div id="zoo-facts" class="small"></div>
+
+      <hr style="margin:12px 0">
+
+      <h4 style="margin:0 0 8px 0; color:var(--zy-blue)">Culturas úteis na alimentação</h4>
+      <div id="cult-list" class="small">Carregando culturas compatíveis...</div>
+    </div>
+
+    <!-- IA Nutricional Avançada -->
+    <div class="card" id="ia-nutri">
+      <h3>🧠 IA Nutricional Avançada</h3>
+
+      <label>Parâmetros do lote (texto livre ou preencher campos):</label>
+      <textarea id="nutri-text" class="form-control" rows="2" placeholder="Ex: 40 cabeças, peso 280 kg, ganho 0.2 kg/dia, pasto PB 6%, milho silagem 30%"></textarea>
+
+      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-zy" onclick="runNutriAdvanced()">Analisar Nutrição</button>
+        <button class="btn btn-outline-secondary" onclick="document.getElementById('nutri-text').value=''; document.getElementById('nutri-adv-result').style.display='none'">Limpar</button>
+      </div>
+
+      <div id="nutri-adv-result" class="result" style="display:none"></div>
+    </div>
+
+    <!-- IA Sanitária Avançada -->
+    <div class="card" id="ia-sani">
+      <h3>🩺 IA Sanitária Avançada</h3>
+      <label>Descreva os sintomas (texto livre):</label>
+      <textarea id="sani-text" class="form-control" rows="2" placeholder="Ex: tosse, secreção nasal, febre 39.8, diarreia"></textarea>
+
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <button class="btn-zy" onclick="runSaniAdvanced()">Analisar Sanitário</button>
+        <button class="btn btn-outline-secondary" onclick="document.getElementById('sani-text').value=''; document.getElementById('sani-adv-result').style.display='none'">Limpar</button>
+      </div>
+
+      <div id="sani-adv-result" class="result" style="display:none"></div>
+    </div>
+
+    <!-- Formulação Avançada (culturas + suplemento) -->
+    <div class="card" id="ration-card">
+      <h3>🥣 Formulação Avançada — integrar CULTURAS + suplementação</h3>
+      <div class="small">Escolha culturas (da base ZyTerra), informe percentagem e a IA calcula PB, energia (índice), risco e sugere insumos do estoque.</div>
+
+      <div style="margin-top:8px">
+        <label>Escolha 1ª cultura</label>
+        <select id="cult1" class="form-control"></select>
+        <label style="margin-top:6px">% 1ª cultura</label>
+        <input id="pct1" type="number" class="form-control" value="60">
+
+        <label style="margin-top:6px">Escolha 2ª cultura (opcional)</label>
+        <select id="cult2" class="form-control"></select>
+        <label style="margin-top:6px">% 2ª cultura</label>
+        <input id="pct2" type="number" class="form-control" value="20">
+
+        <label style="margin-top:6px">Suplemento / Farelo (%)</label>
+        <input id="supp" type="number" class="form-control" value="15">
+
+        <label style="margin-top:6px">Núcleo / premix (%)</label>
+        <input id="nucleus" type="number" class="form-control" value="5">
+      </div>
+
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <button class="btn-zy" onclick="formulateWithCrops()">Calcular fórmula com culturas</button>
+        <button class="btn btn-outline-secondary" onclick="clearFormulation()">Limpar</button>
+      </div>
+
+      <div id="ration-adv-result" class="result" style="display:none"></div>
+    </div>
+
+    <!-- Insumos recomendados -->
+    <div class="card" id="insumos-card">
+      <h3>🧪 Insumos recomendados para este lote</h3>
+      <div id="insumos-reco" class="small">Nenhuma recomendação gerada ainda.</div>
+    </div>
+
+    <!-- Estimador avançado de desempenho & lotação -->
+    <div class="card" id="performance-card">
+      <h3>📈 Estimador Avançado de Desempenho & Lotação</h3>
+
+      <div class="inline" style="margin-top:8px">
+        <div style="min-width:160px">
+          <label>Nº de animais</label>
+          <input id="perf-animals" type="number" class="form-control" value="40">
+        </div>
+        <div style="min-width:160px">
+          <label>Peso médio (kg)</label>
+          <input id="perf-weight" type="number" class="form-control" value="250">
+        </div>
+        <div style="min-width:160px">
+          <label>PB do pasto (%)</label>
+          <input id="perf-pb" type="number" class="form-control" value="6">
+        </div>
+        <div style="min-width:160px">
+          <label>Área (ha)</label>
+          <input id="perf-area" type="number" class="form-control" value="10">
+        </div>
+      </div>
+
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <button class="btn-zy" onclick="estimatePerformanceAdvanced()">Calcular lotação & ADG</button>
+        <button class="btn btn-outline-secondary" onclick="clearPerformanceAdvanced()">Limpar</button>
+      </div>
+
+      <div id="perf-adv-result" class="result" style="display:none"></div>
+    </div>
+
+    <!-- Recomendações finais e plano -->
+    <div class="card" id="recommend-card">
+      <h3>📄 Recomendações e Plano prático</h3>
+      <div id="recommend-content"><p class="small">Sem recomendações — gere análises acima.</p></div>
+    </div>
+
+  </div>
+
+<script>
+/* ========== CULTURES DB (mesmo que antes) ========== */
+const culturesDB = {
+  "milho": {nome:"Milho", formas:["grão","silagem","rolão"], pb:8.5, ntd:78, fdn:20, obs:"Alto amido; risco de acidose se fibra baixa; atenção a micotoxinas"},
+  "soja": {nome:"Soja", formas:["grão","farelo"], pb:44, ntd:85, fdn:8, obs:"Farelo de soja muito proteico; grão cru não indicado sem tratamento"},
+  "feijao": {nome:"Feijão", formas:["grão"], pb:22, ntd:60, fdn:20, obs:"Usado com cautela; fatores antinutricionais em grãos crus"},
+  "cana-de-açucar": {nome:"Cana-de-açúcar", formas:["forragem"], pb:3.5, ntd:55, fdn:45, obs:"Baixa PB; alta fibra"},
+  "algodao": {nome:"Algodão", formas:["farelo"], pb:40, ntd:70, fdn:18, obs:"Farelo proteico; verificar resíduos de fibra"},
+  "pastagem": {nome:"Pastagem (genérica)", formas:["forragem"], pb:8, ntd:60, fdn:55, obs:"Varia por espécie (Brachiaria etc.)"},
+  "sorgo": {nome:"Sorgo", formas:["grão","forragem"], pb:8, ntd:70, fdn:25, obs:"Silagens de sorgo variam em energia"},
+  "cana": {nome:"Cana", formas:["forragem"], pb:3.0, ntd:50, fdn:48, obs:"Semelhante à cana-de-açúcar"},
+  "arroz": {nome:"Arroz", formas:["grão","farelo"], pb:7.5, ntd:72, fdn:12, obs:"grãos energéticos; farelo proteico moderado"}
+};
+
+/* ========== ANIMAL DB ========== */
+const animalDB = {
+  "bovinos-corte-confinamento": { title:"Bovinos de Corte — Confinamento", description:"Confinamento: dieta concentrada, alta densidade.", facts: { ADG:"1.0–1.6 kg/dia", pb_req:"12–14% PB" } },
+  "bovinos-corte-recria": { title:"Bovinos — Recria / Engorda", description:"Recria em pasto + engorda.", facts:{ADG:"0.4–1.0 kg/dia", pb_req:"10–12% PB"} },
+  "bovinos-leite-pasto": { title:"Bovinos de Leite — Pastoreio", description:"Pastoreio rotacionado.", facts:{milk:"6–20 L/dia", pb_req:"14–18% PB lactação"} },
+  "bovinos-leite-intensivo": { title:"Bovinos de Leite — Intensivo", description:"Alta produção; dieta TMR.", facts:{milk:"20–40 L/dia", pb_req:"16–20% PB"} },
+  "suinos-terminacao": { title:"Suínos — Creche/Terminação", description:"Fases definidas; alto crescimento", facts:{ADG:"0.6–1.0 kg/dia", pb_req:"16–20% PB"} },
+  "aves-corte": { title:"Aves de Corte", description:"Ciclos 35-45 dias", facts:{ADG:"45–70 g/dia", pb_req:"20–24% PB"} },
+  "aves-poedeiras": { title:"Poedeiras", description:"Produção de ovos", facts:{eggProd:"60–90 ovos/ciclo", pb_req:"16–18% PB"} }
+};
+
+/* ========= Insumos (será carregado via /api/insumos) ========= */
+let insumosAPI = null;
+async function loadInsumos(){
+  try{
+    const res = await fetch('/api/insumos');
+    insumosAPI = await res.json();
+  } catch(e){
+    console.error('Erro ao carregar insumos:', e);
+    insumosAPI = null;
+  }
+}
+
+/* ========== Helpers & init ========== */
+function getParam(name){ return new URLSearchParams(window.location.search).get(name) || ''; }
+function getSlug(){ return getParam('nome').toLowerCase().trim(); }
+
+function fillPage(){
+  const slug = getSlug();
+  const entry = animalDB[slug];
+  if(!entry){
+    document.getElementById('animal-title').textContent = "Sistema não informado / inválido";
+    document.getElementById('animal-sub').textContent = "Abra um sistema pela lista de animais.";
+    document.getElementById('basic-facts').innerHTML = "<p class='small'>Use a lista para escolher um sistema (ex: ?nome=bovinos-corte-confinamento).</p>";
+    document.getElementById('zoo-facts').innerHTML = '';
+    populateCultSelects();
+    return;
+  }
+  document.getElementById('animal-title').textContent = entry.title;
+  document.getElementById('animal-sub').textContent = entry.description;
+  let bf = document.getElementById('basic-facts');
+  bf.innerHTML = `<p><strong>Valores padrão:</strong></p><ul>${Object.keys(entry.facts).map(k=>`<li><strong>${k}:</strong> ${entry.facts[k]}</li>`).join('')}</ul>`;
+  document.getElementById('zoo-facts').innerHTML = `<p class="small">Ficha técnica resumida.</p><ul>${Object.keys(entry.facts).map(k=>`<li><strong>${k}:</strong> ${entry.facts[k]}</li>`).join('')}</ul>`;
+
+  populateCultListForAnimal(slug);
+  populateCultSelects();
+}
+
+/* Populate culture lists and selects (same heuristics) */
+function populateCultListForAnimal(slug){
+  const mapping = {
+    "bovinos-corte-confinamento":["milho","soja","amendoim","algodao"],
+    "bovinos-corte-recria":["pastagem","milho","sorgo","cana-de-açucar"],
+    "bovinos-leite-pasto":["pastagem","milho","soja"],
+    "bovinos-leite-intensivo":["milho","soja","arroz"],
+    "suinos-terminacao":["milho","soja","arroz"],
+    "aves-corte":["milho","soja"],
+    "aves-poedeiras":["milho","soja"]
+  };
+  const list = mapping[slug] || Object.keys(culturesDB).slice(0,6);
+  const container = document.getElementById('cult-list');
+  container.innerHTML = '';
+  list.forEach(k=>{
+    const c = culturesDB[k];
+    if(!c) return;
+    const el = document.createElement('div');
+    el.innerHTML = `<span class="tag">${c.nome}</span> <div style="margin-top:6px"><strong>Formas:</strong> ${c.formas.join(', ')} — <strong>PB:</strong> ${c.pb}% • <strong>NDT:</strong> ${c.ntd}% • <strong>FDN:</strong> ${c.fdn}%</div>
+      <div style="margin-top:6px" class="small"><em>${c.obs}</em></div>`;
+    container.appendChild(el);
+  });
+}
+
+function populateCultSelects(){
+  const s1 = document.getElementById('cult1');
+  const s2 = document.getElementById('cult2');
+  s1.innerHTML = '<option value="">-- selecionar --</option>';
+  s2.innerHTML = '<option value="">-- selecionar --</option>';
+  Object.keys(culturesDB).forEach(k=>{
+    const name = culturesDB[k].nome;
+    s1.innerHTML += `<option value="${k}">${name}</option>`;
+    s2.innerHTML += `<option value="${k}">${name}</option>`;
+  });
+}
+
+/* ========== IA NUTRICIONAL & SANITÁRIA (mantém lógica avançada) ========== */
+function runNutriAdvanced(){
+  const txt = (document.getElementById('nutri-text').value || '').toLowerCase();
+  const out = document.getElementById('nutri-adv-result');
+  if(!txt.trim()){ out.style.display='block'; out.innerHTML='<strong>Digite parâmetros do lote (ex: 40 cabeças, peso 280 kg, ganho 0.2 kg/dia, pasto PB 6%, milho silagem 30%).</strong>'; return; }
+
+  const msgs = [];
+  // parse
+  const gainMatch = txt.match(/(?:ganho|adg|g\/dia|kg\/d)[^\d]*((\d+(\.\d+)?))/);
+  const reportedGain = gainMatch ? parseFloat(gainMatch[1]) : null;
+  const pbMatch = txt.match(/pasto[^\d]*(\d+(\.\d+)?)\s?%/);
+  const pasturePB = pbMatch ? parseFloat(pbMatch[1]) : null;
+  const hasMilho = txt.includes('milho') || txt.includes('silagem');
+
+  if(pasturePB && pasturePB < 7) msgs.push("Proteína do pasto baixa (<7%): suplementação proteica indicada (farelo/ureia com energético).");
+  else if(pasturePB && pasturePB < 9) msgs.push("PB moderadamente baixa (7–9%): complementar proteína e revisar energia.");
+  else if(pasturePB) msgs.push("PB do pasto adequada para manutenção; ajustar energia para ganho desejado.");
+  else msgs.push("PB do pasto não informado: envie PB% para diagnóstico preciso.");
+
+  if(reportedGain){
+    msgs.push(`Ganho relatado: ${reportedGain} kg/dia — verificar se dieta fornece energia/proteína suficientes.`);
+    if(reportedGain < 0.4) msgs.push("Ganho muito baixo — suspeita de déficit energético ou parasitismo; considerar suplementação e vermifugação estrategica.");
+  }
+
+  if(hasMilho) msgs.push("Milho detectado — fonte energética; assegure fibra efetiva para evitar acidose em ruminantes.");
+
+  const pbTarget = (reportedGain && reportedGain>=1.0) ? 12.5 : (reportedGain && reportedGain>=0.6 ? 11 : 10);
+  msgs.push(`PB alvo sugerido: ~${pbTarget}%`);
+
+  msgs.push("Oferecer sal mineral completo; ajustar fósforo/calcio conforme análise.");
+
+  out.style.display='block';
+  out.innerHTML = `<strong>Diagnóstico nutricional avançado:</strong>
+    <ul>${msgs.map(m=>`<li>${m}</li>`).join('')}</ul>
+    <p class="small">Para prescrição exata envie: nº animais, peso médio, PB da forragem (%), MS disponível (kg/ha) e ADG esperado.</p>`;
+}
+
+/* SANITÁRIO */
+function runSaniAdvanced(){
+  const txt = (document.getElementById('sani-text').value || '').toLowerCase();
+  const out = document.getElementById('sani-adv-result');
+  if(!txt.trim()){ out.style.display='block'; out.innerHTML='<strong>Descreva sintomas (ex: tosse, secreção nasal, febre 39.5, diarreia)</strong>'; return; }
+
+  const messages = [];
+  if(txt.includes('tosse') || txt.includes('secreç') || txt.includes('espirro')){
+    messages.push("Síndromes respiratórias (BRD/IBR/Pasteurella): isolar, reduzir estresse e consultar veterinário.");
+  }
+  if(txt.includes('diar') || txt.includes('fezes') || txt.includes('desidr')){
+    messages.push("Sintomas digestivos: considerar parasitismo ou intoxicação; coletar amostras e revisar água e ração.");
+  }
+  if(txt.match(/febr|39\.\d|40\./)) messages.push("Febre reportada: monitorar e contactar veterinário se persistir ou afetar >5% do lote.");
+  if(messages.length === 0) messages.push("Sintomas não claramente identificados. Avaliação clínica necessária.");
+
+  let urgency = "normal";
+  if(txt.includes('morre') || txt.includes('choque') || txt.includes('sangue')) { urgency = "alta"; messages.unshift("SINAL DE URGÊNCIA: mortes/choque. Chamar veterinário imediatamente."); }
+
+  out.style.display='block';
+  out.innerHTML = `<strong>Diagnóstico sanitário (hipóteses):</strong>
+    <p><em>Nível de urgência: <strong>${urgency}</strong></em></p>
+    <ul>${messages.map(m=>`<li>${m}</li>`).join('')}</ul>
+    <p class="small">Esta IA fornece hipóteses iniciais — não substitui avaliação veterinária presencial.</p>`;
+}
+
+/* FORMULAÇÃO — usa culturesDB e também sugere insumos via API */
+async function formulateWithCrops(){
+  const c1 = document.getElementById('cult1').value;
+  const p1 = parseFloat(document.getElementById('pct1').value) || 0;
+  const c2 = document.getElementById('cult2').value;
+  const p2 = parseFloat(document.getElementById('pct2').value) || 0;
+  const supp = parseFloat(document.getElementById('supp').value) || 0;
+  const nuc = parseFloat(document.getElementById('nucleus').value) || 0;
+  const out = document.getElementById('ration-adv-result');
+
+  const sum = p1 + p2 + supp + nuc;
+  if(Math.abs(sum - 100) > 3){
+    out.style.display='block';
+    out.innerHTML = `<strong>Atenção:</strong> Soma das percentagens = ${sum}%. Ajuste para ~100%.`;
+    return;
+  }
+
+  // calcular pb, ntd, fdn
+  let pbTotal = 0, ntdIndex = 0, fdnTotal = 0;
+  const parts = [];
+  if(c1 && culturesDB[c1]) { pbTotal += culturesDB[c1].pb * (p1/100); ntdIndex += culturesDB[c1].ntd * (p1/100); fdnTotal += culturesDB[c1].fdn * (p1/100); parts.push({nome:culturesDB[c1].nome,pct:p1}); }
+  if(c2 && culturesDB[c2]) { pbTotal += culturesDB[c2].pb * (p2/100); ntdIndex += culturesDB[c2].ntd * (p2/100); fdnTotal += culturesDB[c2].fdn * (p2/100); parts.push({nome:culturesDB[c2].nome,pct:p2}); }
+
+  // suplem e nuc pressupostos
+  pbTotal += 40 * (supp/100);
+  ntdIndex += 65 * (supp/100);
+  fdnTotal += 12 * (supp/100);
+  pbTotal += 18 * (nuc/100);
+  ntdIndex += 40 * (nuc/100);
+  fdnTotal += 10 * (nuc/100);
+
+  // riscos
+  const risks = [];
+  if(ntdIndex > 75 && fdnTotal < 18) risks.push("Risco de acidose: alta energia com pouca fibra. Aumentar fibra efetiva.");
+  if(fdnTotal > 45) risks.push("FDN muito alta: reduz ingestão e desempenho.");
+  const micotProne = ["milho","sorgo","amendoim"];
+  const included = [c1,c2].filter(x=>micotProne.includes(x));
+  if(included.length) risks.push(`Atenção: ${included.map(k=>culturesDB[k].nome).join(', ')} podem ter risco de micotoxinas — testar antes de usar.`);
+
+  const suggestedProteinSupplement = pbTotal < 10 ? "Adicionar farelo de soja ou proteinado 30-40%" : (pbTotal < 12 ? "Considerar pequeno aumento de suplemento proteico" : "PB adequada");
+
+  out.style.display='block';
+  out.innerHTML = `<strong>Formulação estimada:</strong>
+    <p><strong>Componentes:</strong> ${parts.map(p=>`${p.nome} ${p.pct}%`).join(', ')} ${supp?(', Suplemento ' + supp + '%') : ''} ${nuc?(', Núcleo ' + nuc + '%') : ''}</p>
+    <ul>
+      <li>Proteína bruta estimada: <strong>${pbTotal.toFixed(1)}%</strong></li>
+      <li>Índice energético estimado (NDT aprox): <strong>${ntdIndex.toFixed(0)}</strong></li>
+      <li>FDN estimado: <strong>${fdnTotal.toFixed(1)}%</strong></li>
+    </ul>
+    <p><strong>Riscos / Observações:</strong></p>
+    <ul>${risks.length ? risks.map(r=>`<li class="warn">${r}</li>`).join('') : '<li>Sem riscos críticos detectados.</li>'}</ul>
+    <p><strong>Sugestão prática:</strong> ${suggestedProteinSupplement}</p>
+    <p class="small">Valores aproximados — usar tabelas de referência para formulação final.</p>`;
+
+  // gerar recomendações de insumos via API
+  await recommendInsumos({pb: pbTotal, ntd: ntdIndex, fdn: fdnTotal});
+}
+
+/* ========== Recomendador de Insumos (usa insumosAPI carregado via /api/insumos) ========== */
+async function recommendInsumos(formulaMetrics){
+  const box = document.getElementById('insumos-reco');
+  box.innerHTML = '<p class="small">Buscando insumos e sugerindo produtos...</p>';
+
+  if(!insumosAPI){
+    // tentar carregar se não carregado
+    await loadInsumos();
+    if(!insumosAPI){ box.innerHTML = '<span class="warn">API de insumos indisponível. Verifique static/data/insumos.json e a rota /api/insumos.</span>'; return; }
+  }
+
+  // lógica básica de seleção:
+  // - se PB < 10 => recomendar farelo de soja, proteinados
+  // - se NTD alto e FDN baixo => recomendar tampon / levedura
+  // - se risco micotoxinas => recomendar adsorvente
+  // - sempre sugerir sal mineral/núcleo conforme necessidade
+
+  const pb = formulaMetrics.pb || 0;
+  const ntd = formulaMetrics.ntd || 0;
+  const fdn = formulaMetrics.fdn || 0;
+
+  const suggestions = [];
+
+  // buscar no JSON
+  const insumosAll = {
+    proteicos: insumosAPI.suplementos_proteicos || [],
+    energeticos: insumosAPI.suplementos_energeticos || [],
+    nucleos: insumosAPI.mineralizacao_nucleos || [],
+    aditivos: insumosAPI.aditivos || [],
+    racoes: insumosAPI.racoes_comerciais || []
+  };
+
+  // PB low -> proteicos
+  if(pb < 10){
+    const prefer = insumosAll.proteicos.sort((a,b)=> (b.pb||0) - (a.pb||0))[0];
+    if(prefer) suggestions.push({
+      tipo: "Proteico recomendado",
+      produto: prefer.nome,
+      justificativa: `Eleva PB (produto PB ≈ ${prefer.pb || prefer.pb_equivalente || 'n/d'}%). Dose referencial: ${prefer.dose_referencial}`,
+      id: prefer.id
+    });
+  } else if(pb < 12){
+    const prefer = insumosAll.proteicos.find(p=>p.pb && p.pb>=30) || insumosAll.proteicos[0];
+    if(prefer) suggestions.push({
+      tipo: "Proteico sugerido",
+      produto: prefer.nome,
+      justificativa: `Apoia ganho e manutenção proteica. Dose referencial: ${prefer.dose_referencial}`,
+      id: prefer.id
+    });
+  }
+
+  // energy/fdn check
+  if(ntd > 75 && fdn < 18){
+    // risk acidose -> recommend tampon and levedura
+    const tampon = insumosAll.aditivos.find(a=>a.id && a.nome.toLowerCase().includes('bicarbonato')) || insumosAll.aditivos[0];
+    const lev = insumosAll.aditivos.find(a=>a.id && a.nome.toLowerCase().includes('levedura')) || insumosAll.aditivos[1];
+    if(tampon) suggestions.push({tipo:"Aditivo tampon", produto: tampon.nome, justificativa:"Reduz risco de acidose em dietas com alta energia", id: tampon.id});
+    if(lev) suggestions.push({tipo:"Aditivo probiótico", produto: lev.nome, justificativa:"Melhora estabilidade ruminal e digestibilidade", id: lev.id});
+  }
+
+  // micotoxins heuristic
+  if(ntd > 70 && (insumosAll.energeticos.some(e=> e.id === 'milho_moido') || true)){
+    // if user used milho, we already warned earlier; suggest adsorbente if present
+    const ads = insumosAll.aditivos.find(a=>a.id && a.nome.toLowerCase().includes('micotox'));
+    const ads2 = insumosAll.aditivos.find(a=>a.id && a.nome.toLowerCase().includes('adsorvente')) || insumosAll.aditivos.find(a=>a.id && a.nome.toLowerCase().includes('adsorvente'));
+    if(ads2) suggestions.push({tipo:"Mitigador de micotoxinas", produto: ads2.nome, justificativa:"Recomendado quando há risco de micotoxinas em milho/sorgo/amendoim", id: ads2.id});
+  }
+
+  // always suggest mineral/nucleo
+  const nuc = insumosAll.nucleos.length ? insumosAll.nucleos[0] : null;
+  if(nuc) suggestions.push({tipo:"Núcleo / mineral", produto: nuc.nome, justificativa:`Fornece Ca/P e microelementos; dose referencial ${nuc.dose_referencial}`, id: nuc.id});
+
+  // racoes comerciais se pb/ntd desejado
+  if(pb >= 14 && insumosAll.racoes.length){
+    const rc = insumosAll.racoes[0];
+    suggestions.push({tipo:"Ração comercial", produto: rc.nome, justificativa:`Ração balanceada, PB ${rc.pb || 'n/d'}`, id: rc.id});
+  }
+
+  // output
+  const boxHtml = suggestions.map(s=>`<div style="margin-bottom:10px"><strong>${s.tipo}:</strong> ${s.produto}<br><em>${s.justificativa}</em></div>`).join('');
+  document.getElementById('insumos-reco').innerHTML = boxHtml || '<p class="small">Nenhuma sugestão encontrada no banco de insumos.</p>';
+}
+
+/* ========== Estimador & helpers (mantidos) ========== */
+function estimatePerformanceAdvanced(){
+  const n = parseFloat(document.getElementById('perf-animals').value) || 0;
+  const w = parseFloat(document.getElementById('perf-weight').value) || 0;
+  const pb = parseFloat(document.getElementById('perf-pb').value) || 0;
+  const area = parseFloat(document.getElementById('perf-area').value) || 0;
+  const out = document.getElementById('perf-adv-result');
+  if(n<=0 || area<=0){ out.style.display='block'; out.innerHTML = '<strong>Informe número de animais e área.</strong>'; return; }
+
+  const auEquiv = (w / 450);
+  const totalUA = n * auEquiv;
+  const UAperHa = totalUA / area;
+
+  let expectedADG;
+  if(pb < 6) expectedADG = 0.25;
+  else if(pb < 8) expectedADG = 0.45;
+  else if(pb < 10) expectedADG = 0.65;
+  else if(pb < 12) expectedADG = 0.9;
+  else expectedADG = 1.1;
+
+  const intakeKg = 0.02 * w * (1 + (pb - 8)/40);
+  const period = 90;
+  const gainPerAnimal = expectedADG * period;
+  const totalGain = gainPerAnimal * n;
+  let recommendedUAha = (pb >= 10) ? 2.5 : (pb >= 8) ? 2.0 : 1.2;
+
+  const warnings = [];
+  if(UAperHa > recommendedUAha) warnings.push(`Lotação elevada (${UAperHa.toFixed(2)} UA/ha). Recomendar ≤ ${recommendedUAha} UA/ha para PB ${pb}%.`);
+  if(intakeKg < 6) warnings.push("Ingestão estimada por animal baixa — risco de desempenho reduzido.");
+
+  out.style.display = 'block';
+  out.innerHTML = `<strong>Estimativa avançada:</strong>
+    <ul>
+      <li>Equivalência UA por animal (${w} kg): ${auEquiv.toFixed(2)} UA</li>
+      <li>Total UA no lote: ${totalUA.toFixed(2)} UA — ${UAperHa.toFixed(2)} UA/ha</li>
+      <li>ADG estimado (com base em PB ${pb}%): ${expectedADG.toFixed(2)} kg/dia</li>
+      <li>Ingestão de MS estimada por animal: ${intakeKg.toFixed(1)} kg/dia</li>
+      <li>Ganho por animal em ${period} dias: ${gainPerAnimal.toFixed(1)} kg</li>
+      <li>Ganho total do lote em ${period} dias: ${totalGain.toFixed(0)} kg</li>
+    </ul>
+    <p class="small">${warnings.length ? '<strong>Avisos:</strong><ul>' + warnings.map(w=>`<li class="warn">${w}</li>`).join('') + '</ul>' : 'Sem avisos críticos detectados.'}</p>`;
+
+  document.getElementById('recommend-content').innerHTML = `<p><strong>Recomendações:</strong></p>
+    <ul>
+      <li>Avaliar necessidade de suplementação proteica/energética conforme ADG desejado.</li>
+      <li>Se UA/ha acima do recomendado, reduzir lotação ou suplementar.</li>
+      <li>Realizar análise de forragem para prescrição precisa.</li>
+    </ul>`;
+}
+
+/* Clear helpers */
+function clearFormulation(){ ['cult1','cult2'].forEach(id=>document.getElementById(id).value=''); ['pct1','pct2','supp','nucleus'].forEach(id=>document.getElementById(id).value=''); document.getElementById('ration-adv-result').style.display='none'; document.getElementById('insumos-reco').innerHTML='Nenhuma recomendação gerada ainda.'; document.getElementById('recommend-content').innerHTML='<p class="small">Sem recomendações.</p>'; }
+function clearPerformanceAdvanced(){ ['perf-animals','perf-weight','perf-pb','perf-area'].forEach(id=>document.getElementById(id).value=''); document.getElementById('perf-adv-result').style.display='none'; document.getElementById('recommend-content').innerHTML='<p class="small">Sem recomendações.</p>'; }
+
+/* ========== Init ========== */
+(async function init(){ await loadInsumos(); fillPage(); })();
+
+</script>
+</body>
+</html>

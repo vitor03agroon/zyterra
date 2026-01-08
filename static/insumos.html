@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Insumos Agrícolas — ZyTerra</title>
+
+<style>
+  body {
+    background: #f2f6f9;
+    font-family: Arial;
+    margin: 0;
+    padding: 40px;
+  }
+
+  .main {
+    margin-left: 240px;
+    padding: 30px;
+    text-align: center;
+  }
+
+  h1 { 
+    color: #1a3d6f;
+    font-size: 30px;
+  }
+
+  p { color:#444; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 40px auto;
+  }
+
+  .card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .card:hover { transform: translateY(-4px); }
+
+  .icon { font-size: 42px; }
+
+  .label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #123456;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+  <h1>🧪 Insumos Agrícolas</h1>
+  <p>Selecione uma categoria para visualizar os produtos disponíveis</p>
+
+  <div class="grid">
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=herbicidas'">
+      <div class="icon">🌾</div>
+      <div class="label">Herbicidas</div>
+    </div>
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=inseticidas'">
+      <div class="icon">🐛</div>
+      <div class="label">Inseticidas</div>
+    </div>
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=fungicidas'">
+      <div class="icon">🍄</div>
+      <div class="label">Fungicidas</div>
+    </div>
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=fertilizantes'">
+      <div class="icon">🌱</div>
+      <div class="label">Fertilizantes</div>
+    </div>
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=adjuvantes'">
+      <div class="icon">🧴</div>
+      <div class="label">Adjuvantes</div>
+    </div>
+
+    <div class="card" onclick="location.href='/insumos/lista?categoria=nutricao_foliar'">
+      <div class="icon">💧</div>
+      <div class="label">Nutrição foliar</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+fetch("/static/layout/sidebar.html")
+  .then(r => r.text())
+  .then(html => {
+    document.body.insertAdjacentHTML("afterbegin", html);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Animais — ZyTerra</title>
+
+<style>
+  body { background:#eef4fb; margin:0; font-family:Arial; }
+  .main { margin-left:240px; padding:30px; }
+  h1 { color:#163b63; }
+  .card {
+    background:#fff;
+    margin:12px 0;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+  <h1>🐖 Animais</h1>
+
+  <div class="card">Bovinos</div>
+  <div class="card">Suínos</div>
+  <div class="card">Aves</div>
+</div>
+
+<script>
+fetch("/static/layout/sidebar.html")
+  .then(r => r.text())
+  .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+</script>
+
+</body>
+</html>

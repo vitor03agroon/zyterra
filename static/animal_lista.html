@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lista de Animais — ZyTerra</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    :root{--zy-blue:#163b63;--card-bg:#fff;--page-bg:#eef4fb}
+    body{font-family:Arial;background:var(--page-bg);margin:0}
+    .header{background:var(--zy-blue);color:#fff;padding:14px 0;text-align:center;font-weight:700}
+    .content{max-width:1000px;margin:18px auto;padding:18px}
+    .controls{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .system-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+    .sys-card{background:var(--card-bg);padding:14px;border-radius:10px;box-shadow:0 8px 20px rgba(20,40,80,0.06)}
+    .sys-title{font-weight:800;color:var(--zy-blue)}
+    .tag{display:inline-block;padding:4px 8px;border-radius:8px;background:#f0f6ff;color:var(--zy-blue);font-weight:700;margin-top:6px}
+    .small{font-size:13px;color:#0f2f4d}
+  </style>
+</head>
+<body>
+  <div class="header">🐾 ZyTerra — Animais</div>
+  <div class="content">
+    <div class="controls">
+      <h2 id="list-title" style="margin:0;color:var(--zy-blue)">Sistemas</h2>
+      <div style="display:flex;gap:8px">
+        <input id="q" class="form-control" placeholder="Pesquisar por sistema ou termo (ex: confinamento)" style="min-width:240px">
+        <button class="btn" onclick="applyFilter()">Filtrar</button>
+        <a href="/animais" class="btn" style="background:#fff;border:1px solid #e6eefb">Voltar</a>
+      </div>
+    </div>
+
+    <div id="subinfo" style="margin-top:8px;color:#0f2f4d"></div>
+
+    <div class="system-grid" id="system-grid"></div>
+  </div>
+
+<script>
+/* Base de sistemas por categoria (exemplos) */
+const systemsDB = {
+  "bovinos-corte":[
+    {id:"conf_confinamento", title:"Confinamento", desc:"Criação em baias com dieta concentrada; alta ADG e custo operacional.", slug:"bovinos-corte-confinamento"},
+    {id:"recria_engorda", title:"Recria / Engorda", desc:"Sistemas de recria em pasto + engorda em confinamento ou pasto.", slug:"bovinos-corte-recria"}
+  ],
+  "bovinos-leite":[
+    {id:"pastoreio", title:"Pastoreio rotacionado", desc:"Sistemas com pasto rotacionado e suplementação", slug:"bovinos-leite-pasto"},
+    {id:"curso_intensivo", title:"Sistema intensivo", desc:"Alta produção por vaca; nutrição balanceada e ordenha mecânica", slug:"bovinos-leite-intensivo"}
+  ],
+  "suinos":[
+    {id:"creche", title:"Creche e terminação", desc:"Fases definidas: maternidade, creche e terminação", slug:"suinos-terminacao"}
+  ],
+  "aves":[
+    {id:"poedeiras", title:"Poedeiras", desc:"Manejo de poedeiras comerciais, ração e lotação", slug:"aves-poedeiras"},
+    {id:"corte", title:"Frango de Corte", desc:"Ciclos curtos, alta densidade, controle sanitário rigoroso", slug:"aves-corte"}
+  ],
+  "ovinos":[ {id:"ovinos-pasto", title:"Pasto e recria", desc:"Sistemas extensivos e semi-intensivos", slug:"ovinos-pasto"} ],
+  "caprinos":[ {id:"caprinos-leite", title:"Caprinos leiteiros", desc:"Pequenas propriedades e sistemas familiares", slug:"caprinos-leite"} ],
+  "equinos":[ {id:"equinos-desporto", title:"Equinos de trabalho/desporto", desc:"Nutrição e manejo específico", slug:"equinos-geral"} ],
+  "coelhos":[ {id:"coelhos", title:"Coelheira", desc:"Produção intensiva de carne/filhotes", slug:"coelhos-basico"} ]
+};
+
+/* Preenchimento baseado em querystring */
+function getParams(){ const qs=new URLSearchParams(window.location.search); return { tipo: qs.get('tipo')||'', search: qs.get('search')||'' } }
+function render(){
+  const params = getParams();
+  const tipo = params.tipo || '';
+  const search = (params.search || '').toLowerCase();
+  document.getElementById('q').value = search;
+  document.getElementById('list-title').textContent = tipo ? tipo.replace('-',' ').toUpperCase() : 'Sistemas';
+
+  const list = systemsDB[tipo] || [];
+  const filtered = list.filter(s=> !search || (s.title + ' ' + s.desc).toLowerCase().includes(search));
+  const grid = document.getElementById('system-grid');
+  grid.innerHTML = '';
+  if(filtered.length===0){ grid.innerHTML = '<div style="color:#0f2f4d">Nenhum sistema encontrado.</div>'; return; }
+
+  filtered.forEach(s=>{
+    const div = document.createElement('div'); div.className='sys-card';
+    div.innerHTML = `<div class="sys-title">${s.title}</div><div class="small">${s.desc}</div>
+      <div style="margin-top:8px"><button class="btn" onclick="openDetail('${s.slug}')">Abrir</button></div>`;
+    grid.appendChild(div);
+  });
+
+  document.getElementById('subinfo').textContent = `${filtered.length} sistema(s) mostrado(s).`;
+}
+
+function applyFilter(){ const q=document.getElementById('q').value.trim(); const tipo=(new URLSearchParams(window.location.search).get('tipo')||''); location.href='/animal-lista' + (tipo ? '?tipo=' + encodeURIComponent(tipo) + '&search=' + encodeURIComponent(q) : '?search=' + encodeURIComponent(q)); }
+function openDetail(slug){ location.href = '/animal-detalhe?nome=' + encodeURIComponent(slug); }
+
+render();
+</script>
+</body>
+</html>

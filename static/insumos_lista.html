@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Lista de Insumos — ZyTerra</title>
+
+<style>
+  body {
+    background: #eef4fb;
+    margin: 0;
+    font-family: Arial;
+  }
+
+  .main {
+    margin-left: 240px;
+    padding: 30px;
+  }
+
+  h1 {
+    color: #163b63;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .item {
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+
+  .item:hover {
+    transform: translateY(-3px);
+    transition: .2s;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+  <h1 id="titulo">Insumos</h1>
+  <div id="lista"></div>
+</div>
+
+<script src="/static/js/script_insumos.js"></script>
+
+<script>
+// muda título conforme categoria
+const url = new URL(window.location);
+const cat = url.searchParams.get("categoria");
+
+document.getElementById("titulo").innerText =
+  "Categoria: " + (cat || "Insumos");
+
+// sidebar
+fetch("/static/layout/sidebar.html")
+  .then(r => r.text())
+  .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+</script>
+
+</body>
+</html>

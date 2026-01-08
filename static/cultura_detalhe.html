@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ZyTerra — Detalhe da Cultura</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef4fb;
+    display: flex;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    background: #163b63;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 22px 14px;
+  }
+
+  .sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .menu-item {
+    padding: 12px;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: white;
+  }
+
+  .menu-item:hover {
+    background: #0f2a46;
+  }
+
+  /* MAIN */
+  .main {
+    margin-left: 240px;
+    padding: 30px;
+    width: calc(100% - 240px);
+  }
+
+  h1 {
+    color: #163b63;
+    margin-top: 0;
+  }
+
+  .card {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  }
+
+  .result {
+    background: #f1f7ff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 1px solid #d1e4ff;
+    display: none;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>🌾 ZyTerra</h2>
+
+  <a class="menu-item" href="/">🏠 Painel</a>
+  <a class="menu-item" href="/culturas">🌱 Culturas</a>
+  <a class="menu-item" href="/insumos">🧪 Insumos Agrícolas</a>
+  <a class="menu-item" href="/pecuaria">🐄 Pecuária</a>
+  <a class="menu-item" href="/analises">📊 Análises de Solo</a>
+  <a class="menu-item" href="/plantas-daninhas">🌿 Plantas Daninhas</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <h1 id="titulo">Cultura</h1>
+  <p><a href="/culturas" style="color:#163b63;font-weight:600;">← Voltar</a></p>
+
+  <!-- CARD – Valores Ideais -->
+  <div class="card">
+    <h2>📊 Valores Ideais do Solo (EMBRAPA)</h2>
+    <ul id="valores"></ul>
+  </div>
+
+  <!-- CARD – Informações -->
+  <div class="card">
+    <h2>📘 Informações Agronômicas</h2>
+
+    <p id="info"></p>
+
+    <h3>🦠 Doenças Comuns</h3>
+    <ul id="doencas"></ul>
+
+    <h3>🐛 Pragas</h3>
+    <ul id="pragas"></ul>
+
+    <h3>🌿 Manejo</h3>
+    <p id="manejo"></p>
+
+    <h3>🧪 Exigências Nutricionais</h3>
+    <ul id="exigencias"></ul>
+  </div>
+
+  <!-- CARD – IA -->
+  <div class="card">
+    <h2>🧠 IA da Cultura — Diagnóstico</h2>
+
+    <label>Sintomas observados:</label>
+    <textarea id="sym" style="width:100%;height:90px;"></textarea>
+    <button onclick="diagSym()" style="margin-top:10px;">Diagnosticar</button>
+
+    <div id="symRes" class="result"></div>
+
+    <hr>
+
+    <h3>🔬 Solo</h3>
+    <label>pH</label>
+    <input id="ph" type="number" step="0.1">
+
+    <label>P (mg/dm³)</label>
+    <input id="p" type="number">
+
+    <label>K (mg/dm³)</label>
+    <input id="k" type="number">
+
+    <button onclick="diagSoil()" style="margin-top:10px;">Comparar solo</button>
+    <div id="soilRes" class="result"></div>
+
+    <hr>
+
+    <button onclick="diagCombined()" style="font-weight:600;">Gerar diagnóstico combinado</button>
+    <div id="combined" class="result"></div>
+  </div>
+
+</div>
+
+<!-- SCRIPT: BANCO DE DADOS + LÓGICA -->
+<script>
+/* =====================================================
+   BANCO DE DADOS DAS CULTURAS (culturasDB)
+===================================================== */
+const culturasDB = {
+
+  "soja": {
+    nome:"Soja",
+    valores:{ph:"5.8–6.2", P:"20–40 mg/dm³", K:"80–120 mg/dm³"},
+    info:"Cultura altamente responsiva a Nitrogênio e Potássio, sensível a pH baixo.",
+    doencas:["Ferrugem asiática","Mancha-alvo","Oídio"],
+    pragas:["Percevejo","Lagarta-do-cartucho","Helicoverpa"],
+    manejo:"Rotação de culturas, controle de plantas daninhas, uso de fungicidas estratégicos.",
+    exigencias:["Alta demanda de N","Alta demanda de K","Micronutrientes essenciais: Mn, Zn, B"]
+  },
+
+  "milho": {
+    nome:"Milho",
+    valores:{ph:"5.8–6.5", P:"15–30", K:"120–200"},
+    info:"Planta de alto potencial produtivo, responde muito a Nitrogênio.",
+    doencas:["Helmintosporiose","Ferrugem","Cercosporiose"],
+    pragas:["Lagarta-do-cartucho","Broca-do-colmo"],
+    manejo:"N em cobertura, MIP, controle pré-pós emergente.",
+    exigencias:["Alta demanda de N","Moderada demanda de S","Micronutriente chave: Zn"]
+  },
+
+  "feijao": {
+    nome:"Feijão",
+    valores:{ph:"5.5–6.5", P:"15–30", K:"100–140"},
+    info:"Crescimento rápido e sensível a estresse hídrico.",
+    doencas:["Antracnose","Mancha angular"],
+    pragas:["Mosca-branca","Percevejo"],
+    manejo:"Tratamento de sementes, manejo de irrigação.",
+    exigencias:["Alta demanda de K","Sensível a falta de micronutrientes"]
+  },
+
+  "cafe": {
+    nome:"Café",
+    valores:{ph:"5.5–6.5", P:"10–25", K:"100–180"},
+    info:"Cultura perene, exige adubação anual e manejo nutricional contínuo.",
+    doencas:["Ferrugem","Cercosporiose"],
+    pragas:["Bicho-mineiro","Broca-do-café"],
+    manejo:"Poda, adubação parcelada, controle integrado.",
+    exigencias:["Alta demanda de Ca, Mg e K"]
+  },
+
+  "abacate": {
+    nome:"Abacate",
+    valores:{ph:"5.5–6.5", P:"10–25", K:"120–200"},
+    info:"Demanda alta de drenagem e Ca no solo.",
+    doencas:["Antracnose","Podridão radicular"],
+    pragas:["Mosca-das-frutas","Ácaros"],
+    manejo:"Poda, correção de solo, irrigação moderada.",
+    exigencias:["Alta demanda de Ca","K elevado na frutificação"]
+  }
+};
+
+/* =====================================================
+   CARREGAR A CULTURA
+===================================================== */
+function load(){
+  const slug = new URLSearchParams(window.location.search).get("nome");
+  const c = culturasDB[slug];
+
+  if(!c){
+    document.getElementById("titulo").innerText = "Cultura não encontrada";
+    return;
+  }
+
+  document.getElementById("titulo").innerText = c.nome;
+
+  document.getElementById("valores").innerHTML =
+    Object.entries(c.valores).map(([k,v]) => `<li><b>${k.toUpperCase()}:</b> ${v}</li>`).join("");
+
+  document.getElementById("info").innerText = c.info;
+  document.getElementById("manejo").innerText = c.manejo;
+
+  document.getElementById("doencas").innerHTML =
+    c.doencas.map(d=>`<li>${d}</li>`).join("");
+
+  document.getElementById("pragas").innerHTML =
+    c.pragas.map(p=>`<li>${p}</li>`).join("");
+
+  document.getElementById("exigencias").innerHTML =
+    c.exigencias.map(e=>`<li>${e}</li>`).join("");
+}
+
+load();
+
+/* =====================================================
+   IA – Diagnóstico inteligente
+===================================================== */
+function diagSym(){
+  const txt = document.getElementById("sym").value.toLowerCase();
+  const box = document.getElementById("symRes");
+
+  if(!txt.trim()){
+    box.innerHTML = "Descreva os sintomas.";
+    box.style.display = "block";
+    return;
+  }
+
+  let r = "";
+
+  if(txt.includes("amarel")) r += "➡ Pode indicar falta de Nitrogênio.<br>";
+  if(txt.includes("mancha")) r += "➡ Pode indicar doença fúngica.<br>";
+  if(txt.includes("murch")) r += "➡ Pode ser raiz danificada ou falta de água.<br>";
+
+  if(r === "") r = "Nenhuma causa clara encontrada.";
+
+  box.innerHTML = r;
+  box.style.display = "block";
+}
+
+function diagSoil(){
+  const ph = parseFloat(document.getElementById("ph").value);
+  const p = parseFloat(document.getElementById("p").value);
+  const k = parseFloat(document.getElementById("k").value);
+
+  let r = "";
+
+  if(ph < 5.5) r += "pH baixo — aplicar calcário.<br>";
+  if(p < 10) r += "Fósforo muito baixo — precisa de adubação fosfatada.<br>";
+  if(k < 80) r += "Potássio baixo — aplicar KCl ou fonte equivalente.<br>";
+
+  if(r === "") r = "Valores dentro do aceitável.";
+
+  const box = document.getElementById("soilRes");
+  box.innerHTML = r;
+  box.style.display = "block";
+}
+
+function diagCombined(){
+  const box = document.getElementById("combined");
+  box.innerHTML = `
+    <b>Recomendação geral:</b><br>
+    • Ajustar pH se necessário.<br>
+    • Corrigir P e K conforme análise.<br>
+    • Monitorar sintomas nas folhas.<br>
+    • Seguir manejo recomendado da cultura.<br>
+  `;
+  box.style.display = "block";
+}
+</script>
+
+</body>
+</html>

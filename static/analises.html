@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ZyTerra – Análises de Solo</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1a3d6f;
+            padding: 18px;
+            text-align: center;
+            color: white;
+            font-size: 26px;
+        }
+        .container {
+            max-width: 820px;
+            margin: auto;
+            background: white;
+            padding: 22px;
+            margin-top: 26px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+        }
+        h2 { color: #1a3d6f; }
+        label { font-weight: bold; margin-top: 12px; display:block; }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+        }
+        button {
+            margin-top: 18px;
+            width: 100%;
+            padding: 14px;
+            background: #1a3d6f;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .result-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f7faff;
+            border-left: 4px solid #1a3d6f;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .chart-area {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+        }
+        .chart-area canvas {
+            width: 48%;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .explicacao-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #fff7df;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>📊 ZyTerra – Análises de Solo</header>
+
+<div class="container">
+
+    <h2>Selecionar Cultura</h2>
+    <select id="cultura">
+        <option value="milho">🌽 Milho</option>
+        <option value="soja">🌱 Soja</option>
+        <option value="feijao">🫘 Feijão</option>
+        <option value="cana">🍃 Cana-de-açúcar</option>
+        <option value="cafe">☕ Café</option>
+        <option value="hortalicas">🥬 Hortaliças</option>
+    </select>
+
+    <h2>Inserir Parâmetros</h2>
+
+    <label>pH</label>
+    <input id="ph" type="number" step="0.1" placeholder="EX: 5.2">
+
+    <label>Fósforo (P) mg/dm³</label>
+    <input id="p" type="number" placeholder="EX: 14">
+
+    <label>Potássio (K) mg/dm³</label>
+    <input id="k" type="number" placeholder="EX: 120">
+
+    <label>Cálcio (Ca) cmolc/dm³</label>
+    <input id="ca" type="number" step="0.1" placeholder="EX: 3.2">
+
+    <label>Magnésio (Mg) cmolc/dm³</label>
+    <input id="mg" type="number" step="0.1" placeholder="EX: 1.0">
+
+    <label>CTC (cmolc/dm³)</label>
+    <input id="ctc" type="number" step="0.1" placeholder="EX: 8.5">
+
+    <label>Matéria Orgânica (%)</label>
+    <input id="mo" type="number" step="0.1" placeholder="EX: 2.4">
+
+    <button onclick="gerar()">Gerar Laudo Completo</button>
+
+    <div id="resultado" class="result-box" style="display:none;"></div>
+
+    <div class="chart-area">
+        <canvas id="barra"></canvas>
+        <canvas id="radar"></canvas>
+    </div>
+
+    <h2>O que significa cada parâmetro?</h2>
+    <div class="explicacao-box">
+        <p><b>pH:</b> Acidez do solo.</p>
+        <p><b>P:</b> Energia e raízes.</p>
+        <p><b>K:</b> Resistência e saúde.</p>
+        <p><b>Ca:</b> Estrutura do solo.</p>
+        <p><b>Mg:</b> Clorofila.</p>
+        <p><b>CTC:</b> Fertilidade.</p>
+        <p><b>MO:</b> Vida do solo.</p>
+    </div>
+
+</div>
+
+
+<!-- =============================== -->
+<!-- SCRIPT COMPLETO (IA + GRÁFICOS) -->
+<!-- =============================== -->
+
+<script>
+// ===============================
+// DEFINIÇÃO DAS CULTURAS (IDEAL EMBRAPA)
+// ===============================
+
+const culturas_ideais = {
+    milho:  { ph:6.0, p:25, k:100, ca:3.5, mg:1.2, ctc:10, mo:2.5 },
+    soja:   { ph:5.8, p:20, k:80,  ca:3.0, mg:1.0, ctc:8,  mo:2.0 },
+    feijao: { ph:6.0, p:18, k:90,  ca:2.8, mg:1.1, ctc:9,  mo:2.2 },
+    cana:   { ph:5.5, p:18, k:120, ca:2.5, mg:0.9, ctc:8,  mo:1.8 },
+    cafe:   { ph:5.2, p:16, k:140, ca:1.8, mg:0.8, ctc:7,  mo:3.0 },
+    hortalicas: { ph:6.5, p:30, k:150, ca:4.0, mg:1.5, ctc:12, mo:3.5 }
+};
+
+
+// ===============================
+// FUNÇÃO PRINCIPAL – GERAR ANÁLISE COMPLETA
+// ===============================
+
+let graf1, graf2;
+
+function gerar(){
+
+    const cultura = document.getElementById("cultura").value;
+    const meta = culturas_ideais[cultura];
+
+    const valores = {
+        ph: parseFloat(document.getElementById("ph").value),
+        p: parseFloat(document.getElementById("p").value),
+        k: parseFloat(document.getElementById("k").value),
+        ca: parseFloat(document.getElementById("ca").value),
+        mg: parseFloat(document.getElementById("mg").value),
+        ctc: parseFloat(document.getElementById("ctc").value),
+        mo: parseFloat(document.getElementById("mo").value)
+    };
+
+    let resumo = `
+        <h2>📌 Cultura: ${cultura.toUpperCase()}</h2>
+        <b>Resultado inicial:</b><br>
+    `;
+
+    resumo += valores.ph < meta.ph ? "• pH baixo → Recomenda calagem.<br>" : "• pH adequado.<br>";
+    resumo += valores.mo < meta.mo ? "• MO baixa.<br>" : "• MO adequada.<br>";
+    
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("resultado").innerHTML = resumo;
+
+    gerarGraficos(valores, meta);
+
+    const ia = iaLaudoCompleto(cultura, valores, meta);
+    document.getElementById("resultado").innerHTML += ia;
+}
+
+
+// ===============================
+// GRÁFICOS
+// ===============================
+
+function gerarGraficos(real, ideal){
+
+    if(graf1) graf1.destroy();
+    if(graf2) graf2.destroy();
+
+    const labels = ["pH","P","K","Ca","Mg","CTC","MO"];
+    const realData = [real.ph, real.p, real.k, real.ca, real.mg, real.ctc, real.mo];
+    const idealData = [ideal.ph, ideal.p, ideal.k, ideal.ca, ideal.mg, ideal.ctc, ideal.mo];
+
+    graf1 = new Chart(document.getElementById("barra"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                { label: "Real", data: realData, backgroundColor: "#1a7df4" },
+                { label: "Ideal", data: idealData, backgroundColor: "#1ac864" }
+            ]
+        }
+    });
+
+    graf2 = new Chart(document.getElementById("radar"), {
+        type: "radar",
+        data: {
+            labels: labels,
+            datasets: [
+                { label: "Real", data: realData, borderColor: "#1a7df4", fill: true, backgroundColor: "rgba(26,125,244,0.2)" },
+                { label: "Ideal", data: idealData, borderColor: "#1ac864", fill: true, backgroundColor: "rgba(26,200,100,0.2)" }
+            ]
+        }
+    });
+}
+
+
+// ===============================
+// IA ZYTERRA – DIAGNÓSTICO COMPLETO
+// ===============================
+
+function iaCalagem(real, ideal, ctc = 10) {
+    if (real.ph >= ideal.ph) return "";
+
+    let delta = ideal.ph - real.ph;
+    let necessidade = (delta * ctc * 0.5).toFixed(1);
+
+    return `
+        <b>⚙ Calagem:</b><br>
+        Aplicar <b>${necessidade} ton/ha</b> de calcário PRNT 90%.<br><br>
+    `;
+}
+
+function iaGessagem(real, ideal) {
+    if (real.ca >= ideal.ca && real.mg >= ideal.mg) return "";
+    let out = "<b>⚙ Gessagem:</b><br>";
+    out += "• 1,0–1,5 ton/ha de gesso agrícola.<br>";
+    if (real.ca < ideal.ca) out += "• Cálcio baixo.<br>";
+    if (real.mg < ideal.mg) out += "• Magnésio baixo (use calcário dolomítico).<br>";
+    return out + "<br>";
+}
+
+function iaAdubacao(real, ideal, cultura) {
+    let out = "<b>📦 Adubação NPK:</b><br>";
+
+    if (real.p < ideal.p * 0.8)
+        out += "• MAP/SFS (80–120 kg/ha P₂O₅).<br>";
+    if (real.k < ideal.k)
+        out += "• KCl (60–120 kg/ha K₂O).<br>";
+
+    const N = {
+        soja: "20–30 kg/ha",
+        milho: "80–150 kg/ha",
+        feijao: "30–80 kg/ha",
+        cafe: "200–350 kg/ha",
+        cana: "60–120 kg/ha",
+        hortalicas: "100–200 kg/ha"
+    };
+
+    out += `• Nitrogênio: ${N[cultura] || "Dose variável"}.<br>`;
+
+    if (real.mo < ideal.mo)
+        out += "• 2–6 ton/ha de composto orgânico.<br>";
+
+    out += "<br><b>Micronutrientes:</b><br>";
+    out += "• Boro 1–2 kg/ha<br>";
+    out += "• Zinco 2–5 kg/ha<br>";
+    out += "• Enxofre 10–30 kg/ha<br><br>";
+
+    return out;
+}
+
+function iaAlertas(real) {
+    let lista = [];
+
+    if (real.ph < 4.8) lista.push("Acidez severa — risco de toxidez de Alumínio.");
+    if (real.k > 250) lista.push("Potássio muito alto — desbalanço Ca/Mg.");
+    if (real.p > 60) lista.push("Fósforo excessivo — risco ambiental.");
+    if (real.mo > 6) lista.push("MO alta → ver drenagem.");
+
+    if (lista.length === 0) return "";
+    
+    let out = "<b>⚠ Alertas:</b><br>";
+    lista.forEach(a => out += "• " + a + "<br>");
+    return out + "<br>";
+}
+
+function iaLaudoCompleto(cultura, real, ideal) {
+    let html = `<hr><h2>🤖 IA – Laudo Agronômico</h2>`;
+    html += iaAlertas(real);
+    html += iaCalagem(real, ideal, real.ctc);
+    html += iaGessagem(real, ideal);
+    html += iaAdubacao(real, ideal, cultura);
+
+    html += `
+        <b>Conclusão:</b><br>
+        Laudo automático baseado em parâmetros EMBRAPA.<br><br>
+    `;
+
+    return html;
+}
+
+</script>
+
+</body>
+</html>

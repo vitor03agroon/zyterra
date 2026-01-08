@@ -1,0 +1,91 @@
+{
+    "herbicidas": [
+      {
+        "nome": "Glifosato 480",
+        "categoria": "herbicida",
+        "ingrediente_ativo": "Glifosato",
+        "formulacao": "SL",
+        "modo_acao": "Inibidor da EPSPS",
+        "grupo_hrac": "G",
+        "dose_ha": "2.0–4.0 L/ha",
+        "alvos": ["buva", "capim-amargoso", "capim-pé-de-galinha"],
+        "culturas": ["soja RR", "milho RR", "algodão RR"],
+        "epoca": "Pós-emergente",
+        "restricoes": "Não controla plantas resistentes, evitar aplicações com plantas estressadas",
+        "classe_toxicologica": "III"
+      },
+      {
+        "nome": "Atrazina 500 SC",
+        "categoria": "herbicida",
+        "ingrediente_ativo": "Atrazina",
+        "formulacao": "SC",
+        "modo_acao": "Inibidor da fotossíntese FSII",
+        "grupo_hrac": "C1",
+        "dose_ha": "3.0–4.0 L/ha",
+        "alvos": ["capim-colchão", "trapoeraba", "caruru"],
+        "culturas": ["milho", "cana-de-açúcar", "sorgo"],
+        "epoca": "Pré e pós-emergência",
+        "restricoes": "Não utilizar em solos arenosos",
+        "classe_toxicologica": "II"
+      }
+    ],
+    "inseticidas": [
+      {
+        "nome": "Lambda-Cialotrina 50 EC",
+        "categoria": "inseticida",
+        "ingrediente_ativo": "Lambda-cialotrina",
+        "grupo_irac": "3A",
+        "dose_ha": "100–150 mL/ha",
+        "alvos": ["lagarta-do-cartucho", "lagartas diversas", "percevejo-marrom"],
+        "culturas": ["soja", "milho", "feijão"],
+        "carencia": "7 dias",
+        "impacto_abelhas": "Alto",
+        "classe_toxicologica": "II"
+      }
+    ],
+    "fungicidas": [
+      {
+        "nome": "Tebuconazol 200 EC",
+        "categoria": "fungicida",
+        "ingrediente_ativo": "Tebuconazol",
+        "grupo_frac": "3",
+        "dose_ha": "0.6–0.8 L/ha",
+        "alvos": ["ferrugem asiática", "mancha-parda", "cercosporiose"],
+        "culturas": ["soja", "trigo", "feijão"],
+        "carencia": "21 dias",
+        "modo_acao": "Triazol – inibidor da biossíntese de ergosterol",
+        "classe_toxicologica": "III"
+      }
+    ],
+    "fertilizantes": [
+      {
+        "nome": "MAP 11-52-00",
+        "categoria": "fertilizante",
+        "tipo": "Fosfatado",
+        "utilizacao": "Fornecimento de fósforo e nitrogênio",
+        "dose_ha": "100–200 kg/ha",
+        "observacoes": "Evitar contato direto com sementes sensíveis"
+      }
+    ],
+    "adjuvantes": [
+      {
+        "nome": "Óleo Mineral 756",
+        "categoria": "adjuvante",
+        "tipo": "Óleo mineral emulsionável",
+        "dose": "0.5–1.0 L/ha",
+        "funcao": "Aumenta penetração e espalhamento da gota",
+        "compatibilidade": "Compatível com herbicidas, inseticidas e fungicidas"
+      }
+    ],
+    "nutricao_foliar": [
+      {
+        "nome": "Zinco Quelatado",
+        "categoria": "nutricao-foliar",
+        "nutrientes": "Zn 7%",
+        "dose_ha": "0.5–1.0 L/ha",
+        "usos": ["deficiência de zinco", "melhora pegamento de flores"],
+        "culturas": ["milho", "soja", "trigo"]
+      }
+    ]
+  }
+  
