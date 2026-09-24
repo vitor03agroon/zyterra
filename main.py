@@ -385,6 +385,16 @@ def atualizar_perfil(
 
 @app.get("/", response_class=HTMLResponse)
 def home():
+    return file_response("login.html")
+
+
+@app.get("/cadastro", response_class=HTMLResponse)
+def cadastro():
+    return file_response("cadastro.html")
+
+
+@app.get("/painel", response_class=HTMLResponse)
+def painel():
     return file_response("index.html")
 
 
@@ -401,6 +411,46 @@ def analises():
 @app.get("/pecuaria", response_class=HTMLResponse)
 def pecuaria():
     return file_response("pecuaria.html")
+
+
+@app.get("/animais", response_class=HTMLResponse)
+def animais():
+    return file_response("animais.html")
+
+
+@app.get("/animal-lista", response_class=HTMLResponse)
+def animal_lista():
+    return file_response("animal_lista.html")
+
+
+@app.get("/animal-detalhe", response_class=HTMLResponse)
+def animal_detalhe():
+    return file_response("animal_detalhe.html")
+
+
+@app.get("/insumos", response_class=HTMLResponse)
+def insumos():
+    return file_response("insumos.html")
+
+
+@app.get("/insumos-lista", response_class=HTMLResponse)
+def insumos_lista():
+    return file_response("insumos_lista.html")
+
+
+@app.get("/insumo-detalhe", response_class=HTMLResponse)
+def insumo_detalhe():
+    return file_response("insumo_detalhe.html")
+
+
+@app.get("/plantas-daninhas", response_class=HTMLResponse)
+def plantas_daninhas():
+    return file_response("plantas_daninhas.html")
+
+
+@app.get("/planta-detalhe", response_class=HTMLResponse)
+def planta_detalhe():
+    return file_response("planta_detalhe.html")
 
 
 # ============================================================
