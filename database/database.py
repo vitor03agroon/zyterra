@@ -9,22 +9,36 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise RuntimeError(
         "DATABASE_URL não configurada. "
-        "Configure a variável no ambiente antes de iniciar o ZyTerra."
+        "Configure a variável no Render."
     )
 
+# Render pode fornecer a URL começando com postgres://
+# O SQLAlchemy espera postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://",
+        "postgresql+psycopg://",
+        1
+    )
+
+# Também garante o driver correto caso venha como postgresql://
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1
+    )
 
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
 )
 
-
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine,
 )
-
 
 Base = declarative_base()
 
