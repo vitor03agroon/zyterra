@@ -1,3 +1,20 @@
 fastapi
 uvicorn[standard]
 reportlab
+
+# IA
+google-generativeai
+
+# Banco de dados
+sqlalchemy
+psycopg[binary]
+
+# Autenticação
+python-jose[cryptography]
+pwdlib[argon2]
+
+# Uploads e arquivos
+python-multipart
+pandas
+openpyxl
+python-dotenv
