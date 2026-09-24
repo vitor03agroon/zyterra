@@ -1,295 +1,338 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Animais — ZyTerra</title>
 
 <style>
-  :root {
-    --zy-blue: #163b63;
-    --zy-blue-dark: #0f2f4d;
-    --zy-green: #3f7d4a;
-    --bg: #eef4fb;
-    --white: #ffffff;
-    --border: #dfe8f2;
-  }
 
-  * {
-    box-sizing: border-box;
-  }
+*{
+    box-sizing:border-box;
+}
 
-  body {
-    background: var(--bg);
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #243447;
-  }
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef4fb;
+    color:#163b63;
+}
 
-  .main {
-    margin-left: 240px;
-    padding: 35px;
-    min-height: 100vh;
-  }
+.main{
+    width:100%;
+    min-height:100vh;
+    padding:45px;
+}
 
-  .page-header {
-    margin-bottom: 30px;
-  }
+h1{
+    margin:0;
+    font-size:32px;
+    color:#163b63;
+}
 
-  .page-header h1 {
-    margin: 0;
-    color: var(--zy-blue);
-    font-size: 30px;
-    font-weight: 700;
-  }
+.subtitle{
+    margin-top:8px;
+    color:#60758b;
+    font-size:15px;
+}
 
-  .page-header p {
-    margin: 8px 0 0;
-    color: #60758a;
-    font-size: 15px;
-  }
+.animal-grid{
+    margin-top:32px;
 
-  .section-title {
-    color: var(--zy-blue-dark);
-    font-size: 19px;
-    font-weight: 700;
-    margin: 0 0 15px;
-  }
+    display:grid;
 
-  .animals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 18px;
-  }
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
 
-  .animal-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px;
-    min-height: 145px;
-    cursor: pointer;
+    gap:20px;
+
+    max-width:1200px;
+}
+
+.animal-card{
+    background:#ffffff;
+
+    border-radius:14px;
+
+    padding:25px;
+
+    min-height:155px;
+
+    box-shadow:
+        0 6px 20px rgba(22,59,99,0.08);
+
+    cursor:pointer;
+
     transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease,
-      border-color 0.18s ease;
-  }
+        transform .2s ease,
+        box-shadow .2s ease;
+}
 
-  .animal-card:hover {
-    transform: translateY(-3px);
-    border-color: #b9cde0;
-    box-shadow: 0 10px 25px rgba(22, 59, 99, 0.10);
-  }
+.animal-card:hover{
 
-  .animal-card h3 {
-    margin: 0 0 9px;
-    color: var(--zy-blue);
-    font-size: 18px;
-  }
+    transform:translateY(-4px);
 
-  .animal-card p {
-    margin: 0;
-    color: #64788c;
-    font-size: 14px;
-    line-height: 1.5;
-  }
+    box-shadow:
+        0 12px 28px rgba(22,59,99,0.14);
 
-  .animal-card .access {
-    display: inline-block;
-    margin-top: 18px;
-    color: var(--zy-green);
-    font-size: 13px;
-    font-weight: 700;
-  }
+}
 
-  @media (max-width: 900px) {
-    .main {
-      margin-left: 0;
-      padding: 20px;
-    }
-  }
+.animal-icon{
+    font-size:36px;
+
+    margin-bottom:16px;
+}
+
+.animal-title{
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#163b63;
+}
+
+.animal-description{
+
+    margin-top:9px;
+
+    color:#6b7d8f;
+
+    font-size:14px;
+
+    line-height:1.5;
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="main">
 
-  <div class="page-header">
-    <h1>Animais</h1>
-    <p>
-      Selecione o sistema de produção para consultar informações,
-      manejo, nutrição, sanidade e desempenho.
-    </p>
-  </div>
 
-  <div class="section-title">
-    Sistemas de produção
-  </div>
+    <h1>Pecuária — Animais</h1>
 
-  <div class="animals-grid">
 
-    <!-- BOVINOS DE CORTE -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('bovinos-corte')"
-    >
-      <h3>Bovinos de Corte</h3>
-      <p>
-        Sistemas de confinamento, recria e engorda.
-      </p>
-      <span class="access">Acessar sistemas →</span>
+    <div class="subtitle">
+
+        Selecione a categoria animal para acessar
+        os sistemas de produção.
+
     </div>
 
 
-    <!-- BOVINOS DE LEITE -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('bovinos-leite')"
-    >
-      <h3>Bovinos de Leite</h3>
-      <p>
-        Sistemas de pastoreio e produção intensiva.
-      </p>
-      <span class="access">Acessar sistemas →</span>
+    <div class="animal-grid">
+
+
+        <!-- BOVINOS DE CORTE -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('bovinos-corte')"
+        >
+
+            <div class="animal-icon">
+                🐂
+            </div>
+
+            <div class="animal-title">
+                Bovinos de Corte
+            </div>
+
+            <div class="animal-description">
+                Confinamento, recria, engorda e
+                sistemas de produção.
+            </div>
+
+        </div>
+
+
+        <!-- BOVINOS DE LEITE -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('bovinos-leite')"
+        >
+
+            <div class="animal-icon">
+                🐄
+            </div>
+
+            <div class="animal-title">
+                Bovinos de Leite
+            </div>
+
+            <div class="animal-description">
+                Sistemas de produção leiteira,
+                pasto e intensificação.
+            </div>
+
+        </div>
+
+
+        <!-- SUÍNOS -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('suinos')"
+        >
+
+            <div class="animal-icon">
+                🐖
+            </div>
+
+            <div class="animal-title">
+                Suínos
+            </div>
+
+            <div class="animal-description">
+                Sistemas de criação, crescimento
+                e terminação.
+            </div>
+
+        </div>
+
+
+        <!-- AVES -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('aves')"
+        >
+
+            <div class="animal-icon">
+                🐔
+            </div>
+
+            <div class="animal-title">
+                Aves
+            </div>
+
+            <div class="animal-description">
+                Aves de corte e sistemas de
+                produção de ovos.
+            </div>
+
+        </div>
+
+
+        <!-- OVINOS -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('ovinos')"
+        >
+
+            <div class="animal-icon">
+                🐑
+            </div>
+
+            <div class="animal-title">
+                Ovinos
+            </div>
+
+            <div class="animal-description">
+                Sistemas de produção,
+                pastagem e manejo.
+            </div>
+
+        </div>
+
+
+        <!-- CAPRINOS -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('caprinos')"
+        >
+
+            <div class="animal-icon">
+                🐐
+            </div>
+
+            <div class="animal-title">
+                Caprinos
+            </div>
+
+            <div class="animal-description">
+                Produção de leite, carne
+                e sistemas de criação.
+            </div>
+
+        </div>
+
+
+        <!-- EQUINOS -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('equinos')"
+        >
+
+            <div class="animal-icon">
+                🐎
+            </div>
+
+            <div class="animal-title">
+                Equinos
+            </div>
+
+            <div class="animal-description">
+                Manejo, alimentação e
+                sistemas de criação.
+            </div>
+
+        </div>
+
+
+        <!-- COELHOS -->
+
+        <div
+            class="animal-card"
+            onclick="abrirCategoria('coelhos')"
+        >
+
+            <div class="animal-icon">
+                🐇
+            </div>
+
+            <div class="animal-title">
+                Coelhos
+            </div>
+
+            <div class="animal-description">
+                Sistemas básicos de criação
+                e manejo.
+            </div>
+
+        </div>
+
+
     </div>
 
-
-    <!-- SUÍNOS -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('suinos')"
-    >
-      <h3>Suínos</h3>
-      <p>
-        Sistemas de produção, creche e terminação.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-
-    <!-- AVES -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('aves')"
-    >
-      <h3>Aves</h3>
-      <p>
-        Frango de corte e produção de ovos.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-
-    <!-- OVINOS -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('ovinos')"
-    >
-      <h3>Ovinos</h3>
-      <p>
-        Sistemas de criação em pasto e recria.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-
-    <!-- CAPRINOS -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('caprinos')"
-    >
-      <h3>Caprinos</h3>
-      <p>
-        Sistemas de criação de caprinos leiteiros.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-
-    <!-- EQUINOS -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('equinos')"
-    >
-      <h3>Equinos</h3>
-      <p>
-        Manejo de equinos de trabalho e desporto.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-
-    <!-- COELHOS -->
-    <div
-      class="animal-card"
-      onclick="abrirCategoria('coelhos')"
-    >
-      <h3>Coelhos</h3>
-      <p>
-        Sistemas de produção e manejo de coelhos.
-      </p>
-      <span class="access">Acessar sistemas →</span>
-    </div>
-
-  </div>
 
 </div>
 
 
 <script>
 
-  /*
-   * Abre o animal_lista.html informando
-   * qual categoria foi selecionada.
-   *
-   * Exemplos:
-   *
-   * /animal-lista?tipo=bovinos-corte
-   * /animal-lista?tipo=suinos
-   * /animal-lista?tipo=aves
-   */
+function abrirCategoria(tipo){
 
-  function abrirCategoria(tipo) {
     window.location.href =
-      "/animal-lista?tipo=" + encodeURIComponent(tipo);
-  }
+        "/animal-lista?tipo=" +
+        encodeURIComponent(tipo);
 
-
-  /*
-   * Carrega a barra lateral do ZyTerra.
-   */
-
-  fetch("/static/layout/sidebar.html")
-    .then(response => {
-
-      if (!response.ok) {
-        throw new Error(
-          "Não foi possível carregar a barra lateral."
-        );
-      }
-
-      return response.text();
-    })
-    .then(html => {
-
-      document.body.insertAdjacentHTML(
-        "afterbegin",
-        html
-      );
-
-    })
-    .catch(error => {
-
-      console.warn(
-        "Sidebar não carregada:",
-        error
-      );
-
-    });
+}
 
 </script>
 
+
 </body>
+
 </html>
