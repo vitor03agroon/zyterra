@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Sistemas de Produção — ZyTerra</title>
+  <title>Lista de Sistemas — ZyTerra</title>
 
   <style>
+
     :root {
-      --blue: #163b63;
-      --page-bg: #eef4fb;
-      --text: #17324d;
-      --muted: #60758c;
-      --border: #d8e1ea;
+      --zy-blue: #163b63;
+      --zy-blue-dark: #0f2f4d;
+      --zy-green: #3f7d4a;
+      --bg: #eef4fb;
       --white: #ffffff;
+      --border: #dce6f0;
+      --text: #243447;
+      --muted: #66798c;
     }
 
     * {
@@ -22,395 +26,309 @@
 
     body {
       margin: 0;
-      padding: 28px 40px 50px;
-      background: var(--page-bg);
+      background: var(--bg);
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+    .main {
+      margin-left: 240px;
+      padding: 35px;
+      min-height: 100vh;
     }
 
     /* CABEÇALHO */
 
-    .header {
-      margin-bottom: 24px;
+    .page-header {
+      margin-bottom: 25px;
     }
 
-    .header h1 {
+    .page-header h1 {
       margin: 0;
-      color: var(--blue);
-      font-size: 30px;
+      color: var(--zy-blue);
+      font-size: 29px;
+      font-weight: 700;
     }
 
-    .header p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    /* NAVEGAÇÃO */
-
-    .topnav {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 35px;
-    }
-
-    .topnav a {
-      padding: 11px 21px;
-      border: 1px solid #cbd7e3;
-      border-radius: 24px;
-      background: var(--white);
-      color: var(--blue);
-      text-decoration: none;
-      font-size: 15px;
-    }
-
-    .topnav a.active {
-      background: var(--blue);
-      color: white;
-      border-color: var(--blue);
-    }
-
-    /* CABEÇALHO DA LISTA */
-
-    .list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
-    }
-
-    .list-title {
-      margin: 0;
-      color: var(--blue);
-      font-size: 25px;
-    }
-
-    .subinfo {
-      margin-top: 6px;
+    .page-header p {
+      margin: 8px 0 0;
       color: var(--muted);
       font-size: 14px;
     }
 
-    /* PESQUISA */
+    /* CONTROLES */
 
-    .search-area {
+    .toolbar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .category-title {
+      color: var(--zy-blue);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .category-title span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+      margin-top: 4px;
+    }
+
+    .actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .search-area input {
-      width: 280px;
-      max-width: 100%;
-
-      padding: 11px 13px;
-
-      border: 1px solid #cbd7e3;
-      border-radius: 8px;
-
-      background: white;
-
-      font-size: 14px;
+    .search {
+      width: 260px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
       outline: none;
-    }
-
-    .search-area input:focus {
-      border-color: var(--blue);
-    }
-
-    button {
-      border: 0;
-      border-radius: 8px;
-
-      padding: 11px 18px;
-
-      background: var(--blue);
-      color: white;
-
       font-size: 14px;
-      cursor: pointer;
     }
 
-    .back-button {
+    .search:focus {
+      border-color: var(--zy-blue);
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
-
-      padding: 11px 18px;
-
-      border: 1px solid #cbd7e3;
-      border-radius: 8px;
-
-      background: white;
-      color: var(--blue);
-
-      text-decoration: none;
-
-      font-size: 14px;
+      justify-content: center;
     }
 
-    /* CARDS */
+    .btn-primary {
+      background: var(--zy-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--zy-blue-dark);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--zy-blue);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--zy-blue);
+    }
+
+    /* INFORMAÇÃO */
+
+    .info {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    /* GRID */
 
     .system-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
+      grid-template-columns:
+        repeat(auto-fit, minmax(270px, 1fr));
+      gap: 18px;
     }
+
+    /* CARD */
 
     .system-card {
       background: var(--white);
-
       border: 1px solid var(--border);
       border-radius: 14px;
+      padding: 22px;
 
-      padding: 23px;
+      min-height: 180px;
 
-      min-height: 190px;
-
-      box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
-
-      display: flex;
-      flex-direction: column;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
     }
 
     .system-card:hover {
-      box-shadow: 0 10px 24px rgba(20, 40, 80, 0.09);
+      transform: translateY(-3px);
+      border-color: #b7c9dc;
+      box-shadow:
+        0 10px 25px rgba(22, 59, 99, 0.10);
     }
 
-    .system-type {
-      width: 44px;
-      height: 44px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 10px;
-
-      background: #edf4fa;
-      color: var(--blue);
-
+    .system-category {
+      display: inline-block;
+      background: #edf4fb;
+      color: var(--zy-blue);
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 11px;
       font-weight: 700;
-      font-size: 18px;
-
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .system-title {
-      margin: 0 0 8px;
-
-      color: var(--blue);
-
-      font-size: 19px;
+      color: var(--zy-blue);
+      font-size: 18px;
       font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .system-description {
-      margin: 0;
-
       color: var(--muted);
-
       font-size: 14px;
-      line-height: 1.55;
-
-      flex: 1;
+      line-height: 1.5;
+      min-height: 42px;
     }
 
-    .open-button {
+    .card-footer {
       margin-top: 18px;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      width: 100%;
-
-      padding: 10px;
-
-      border-radius: 8px;
-
-      background: var(--blue);
-      color: white;
-
-      text-decoration: none;
-
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .open-button:hover {
-      opacity: .92;
     }
 
     /* VAZIO */
 
     .empty {
-      grid-column: 1 / -1;
-
       background: white;
       border: 1px solid var(--border);
       border-radius: 14px;
-
-      padding: 35px;
-
-      text-align: center;
-
+      padding: 30px;
       color: var(--muted);
+      text-align: center;
     }
 
-    /* RESPONSIVO */
+    /* MOBILE */
 
-    @media (max-width: 1000px) {
+    @media (max-width: 900px) {
 
-      .system-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .main {
+        margin-left: 0;
+        padding: 20px;
       }
 
-    }
-
-    @media (max-width: 700px) {
-
-      body {
-        padding: 22px 18px 40px;
-      }
-
-      .system-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .search-area {
+      .search {
         width: 100%;
       }
 
-      .search-area input {
+      .actions {
         width: 100%;
       }
 
-      .search-area button,
-      .back-button {
+      .actions .search {
         flex: 1;
-        justify-content: center;
       }
 
     }
 
   </style>
-</head>
 
+</head>
 
 <body>
 
-<div class="container">
+<div class="main">
 
   <!-- CABEÇALHO -->
 
-  <header class="header">
+  <div class="page-header">
 
-    <h1>Sistemas de Produção</h1>
+    <h1>Animais</h1>
 
     <p>
-      Selecione o sistema de produção para acessar as informações técnicas.
+      Sistemas de produção e manejo pecuário do ZyTerra.
     </p>
 
-  </header>
+  </div>
 
 
-  <!-- NAVEGAÇÃO -->
+  <!-- BARRA DE CONTROLE -->
 
-  <nav class="topnav">
+  <div class="toolbar">
 
-    <a href="/painel">
-      Painel
-    </a>
+    <div class="category-title">
 
-    <a href="/culturas">
-      Culturas
-    </a>
-
-    <a href="/analises">
-      Análises
-    </a>
-
-    <a class="active" href="/pecuaria">
-      Pecuária
-    </a>
-
-  </nav>
-
-
-  <!-- LISTA -->
-
-  <section>
-
-    <div class="list-header">
-
-      <div>
-
-        <h2
-          id="list-title"
-          class="list-title"
-        >
-          Sistemas
-        </h2>
-
-        <div
-          id="subinfo"
-          class="subinfo"
-        >
-          Carregando sistemas...
-        </div>
-
+      <div id="category-name">
+        Sistemas de Produção
       </div>
 
-
-      <div class="search-area">
-
-        <input
-          id="q"
-          type="text"
-          placeholder="Pesquisar sistema..."
-        >
-
-        <button
-          onclick="applyFilter()"
-        >
-          Filtrar
-        </button>
-
-        <a
-          href="/pecuaria"
-          class="back-button"
-        >
-          Voltar
-        </a>
-
-      </div>
+      <span id="category-description">
+        Selecione um sistema para visualizar os detalhes.
+      </span>
 
     </div>
 
 
-    <div
-      id="system-grid"
-      class="system-grid"
-    ></div>
+    <div class="actions">
 
-  </section>
+      <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="Pesquisar sistema..."
+      >
+
+      <button
+        class="btn btn-primary"
+        onclick="aplicarBusca()"
+      >
+        Pesquisar
+      </button>
+
+      <a
+        href="/animais"
+        class="btn btn-secondary"
+      >
+        Voltar
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- CONTADOR -->
+
+  <div
+    id="info"
+    class="info"
+  ></div>
+
+
+  <!-- LISTA -->
+
+  <div
+    id="system-grid"
+    class="system-grid"
+  ></div>
 
 </div>
 
 
 <script>
 
-/*
-  SISTEMAS DE PRODUÇÃO
-*/
+/* =========================================================
+   BANCO DE SISTEMAS
+   ========================================================= */
 
 const systemsDB = {
 
@@ -418,15 +336,23 @@ const systemsDB = {
 
     {
       id: "conf_confinamento",
-      title: "Confinamento",
-      desc: "Criação em baias com dieta concentrada, controle nutricional e acompanhamento do desempenho.",
+
+      title: "Bovinos de Corte — Confinamento",
+
+      desc:
+        "Sistema de terminação em confinamento, com dieta concentrada, controle de consumo e acompanhamento de desempenho.",
+
       slug: "bovinos-corte-confinamento"
     },
 
     {
       id: "recria_engorda",
-      title: "Recria / Engorda",
-      desc: "Sistemas de recria e engorda utilizando pastagem, suplementação ou estratégias de intensificação.",
+
+      title: "Bovinos de Corte — Recria / Engorda",
+
+      desc:
+        "Sistema de recria e engorda utilizando pastagem, suplementação e estratégias de terminação.",
+
       slug: "bovinos-corte-recria"
     }
 
@@ -436,16 +362,24 @@ const systemsDB = {
   "bovinos-leite": [
 
     {
-      id: "pastoreio",
-      title: "Pastoreio rotacionado",
-      desc: "Sistema baseado em pastagens manejadas em rotação, com suplementação conforme a necessidade do rebanho.",
+      id: "leite_pasto",
+
+      title: "Bovinos de Leite — Pastoreio",
+
+      desc:
+        "Sistema baseado em pastagem, manejo rotacionado e suplementação conforme a necessidade do rebanho.",
+
       slug: "bovinos-leite-pasto"
     },
 
     {
-      id: "curso_intensivo",
-      title: "Sistema intensivo",
-      desc: "Produção leiteira intensiva com nutrição balanceada, manejo especializado e ordenha.",
+      id: "leite_intensivo",
+
+      title: "Bovinos de Leite — Intensivo",
+
+      desc:
+        "Sistema de alta produção, com dieta balanceada, manejo nutricional e acompanhamento da produção.",
+
       slug: "bovinos-leite-intensivo"
     }
 
@@ -455,9 +389,13 @@ const systemsDB = {
   "suinos": [
 
     {
-      id: "creche",
-      title: "Creche e terminação",
-      desc: "Sistema dividido em fases de produção, com manejo nutricional, sanitário e controle de lotação.",
+      id: "suinos_terminacao",
+
+      title: "Suínos — Creche / Terminação",
+
+      desc:
+        "Sistema dividido por fases, com controle de alimentação, crescimento, sanidade e conversão alimentar.",
+
       slug: "suinos-terminacao"
     }
 
@@ -467,17 +405,25 @@ const systemsDB = {
   "aves": [
 
     {
-      id: "poedeiras",
-      title: "Poedeiras",
-      desc: "Sistema voltado à produção de ovos, com controle de alimentação, manejo, ambiente e sanidade.",
-      slug: "aves-poedeiras"
+      id: "aves_corte",
+
+      title: "Aves — Frango de Corte",
+
+      desc:
+        "Produção de frangos de corte com ciclos definidos, controle de ambiência, nutrição e sanidade.",
+
+      slug: "aves-corte"
     },
 
     {
-      id: "corte",
-      title: "Frango de corte",
-      desc: "Produção de ciclos curtos com controle de densidade, ambiente, nutrição e sanidade.",
-      slug: "aves-corte"
+      id: "aves_poedeiras",
+
+      title: "Aves — Poedeiras",
+
+      desc:
+        "Sistema de produção de ovos com foco em alimentação, manejo, sanidade e desempenho produtivo.",
+
+      slug: "aves-poedeiras"
     }
 
   ],
@@ -486,9 +432,13 @@ const systemsDB = {
   "ovinos": [
 
     {
-      id: "ovinos-pasto",
-      title: "Pasto e recria",
-      desc: "Sistema de criação em pastagem, com manejo do rebanho e estratégias de recria.",
+      id: "ovinos_pasto",
+
+      title: "Ovinos — Pasto / Recria",
+
+      desc:
+        "Sistemas de criação em pastagem, recria e suplementação conforme o objetivo produtivo.",
+
       slug: "ovinos-pasto"
     }
 
@@ -498,9 +448,13 @@ const systemsDB = {
   "caprinos": [
 
     {
-      id: "caprinos-leite",
-      title: "Caprinos leiteiros",
-      desc: "Sistema voltado à produção de leite caprino e ao manejo nutricional e produtivo.",
+      id: "caprinos_leite",
+
+      title: "Caprinos — Leite",
+
+      desc:
+        "Sistema de produção de caprinos leiteiros, com foco em nutrição, manejo e produção.",
+
       slug: "caprinos-leite"
     }
 
@@ -510,9 +464,13 @@ const systemsDB = {
   "equinos": [
 
     {
-      id: "equinos-desporto",
-      title: "Equinos de trabalho e desporto",
-      desc: "Manejo nutricional, sanitário e operacional de equinos utilizados em trabalho ou atividades esportivas.",
+      id: "equinos_geral",
+
+      title: "Equinos — Trabalho / Desporto",
+
+      desc:
+        "Manejo nutricional e produtivo de equinos utilizados para trabalho, esporte e outras atividades.",
+
       slug: "equinos-geral"
     }
 
@@ -522,9 +480,13 @@ const systemsDB = {
   "coelhos": [
 
     {
-      id: "coelhos",
-      title: "Coelheira",
-      desc: "Sistema de produção intensiva de coelhos, com controle de alimentação, manejo e instalações.",
+      id: "coelhos_basico",
+
+      title: "Coelhos — Produção",
+
+      desc:
+        "Sistema de criação de coelhos para produção, reprodução e manejo básico.",
+
       slug: "coelhos-basico"
     }
 
@@ -533,13 +495,79 @@ const systemsDB = {
 };
 
 
-/*
-  PARÂMETROS
-*/
+/* =========================================================
+   CATEGORIAS
+   ========================================================= */
 
-function getParams() {
+const categoryNames = {
 
-  const qs =
+  "bovinos-corte":
+    "Bovinos de Corte",
+
+  "bovinos-leite":
+    "Bovinos de Leite",
+
+  "suinos":
+    "Suínos",
+
+  "aves":
+    "Aves",
+
+  "ovinos":
+    "Ovinos",
+
+  "caprinos":
+    "Caprinos",
+
+  "equinos":
+    "Equinos",
+
+  "coelhos":
+    "Coelhos"
+
+};
+
+
+/* =========================================================
+   DESCRIÇÕES
+   ========================================================= */
+
+const categoryDescriptions = {
+
+  "bovinos-corte":
+    "Sistemas de produção de bovinos destinados à produção de carne.",
+
+  "bovinos-leite":
+    "Sistemas de produção destinados à produção de leite.",
+
+  "suinos":
+    "Sistemas de produção e terminação de suínos.",
+
+  "aves":
+    "Sistemas de produção de aves de corte e postura.",
+
+  "ovinos":
+    "Sistemas de criação e recria de ovinos.",
+
+  "caprinos":
+    "Sistemas de criação e produção de caprinos.",
+
+  "equinos":
+    "Sistemas de manejo de equinos.",
+
+  "coelhos":
+    "Sistemas de criação e produção de coelhos."
+
+};
+
+
+/* =========================================================
+   PARÂMETROS DA URL
+   ========================================================= */
+
+function obterParametros() {
+
+  const params =
     new URLSearchParams(
       window.location.search
     );
@@ -547,123 +575,162 @@ function getParams() {
   return {
 
     tipo:
-      qs.get("tipo") || "",
+      params.get("tipo") || "",
 
-    search:
-      qs.get("search") || ""
-
-  };
-
-}
-
-
-/*
-  FORMATA NOME DA CATEGORIA
-*/
-
-function formatTipo(tipo) {
-
-  if (!tipo) {
-    return "Sistemas";
-  }
-
-  const nomes = {
-
-    "bovinos-corte":
-      "Bovinos de Corte",
-
-    "bovinos-leite":
-      "Bovinos de Leite",
-
-    "suinos":
-      "Suínos",
-
-    "aves":
-      "Aves",
-
-    "ovinos":
-      "Ovinos",
-
-    "caprinos":
-      "Caprinos",
-
-    "equinos":
-      "Equinos",
-
-    "coelhos":
-      "Coelhos"
+    busca:
+      params.get("search") || ""
 
   };
 
-  return nomes[tipo] || tipo;
+}
+
+
+/* =========================================================
+   OBTER TODOS OS SISTEMAS
+   ========================================================= */
+
+function obterTodosOsSistemas() {
+
+  const todos = [];
+
+  Object.keys(systemsDB).forEach(categoria => {
+
+    systemsDB[categoria].forEach(sistema => {
+
+      todos.push({
+
+        ...sistema,
+
+        categoria: categoria
+
+      });
+
+    });
+
+  });
+
+  return todos;
 
 }
 
 
-/*
-  LETRA DO ÍCONE
-*/
+/* =========================================================
+   RENDERIZAR
+   ========================================================= */
 
-function getInitial(title) {
+function renderizar() {
 
-  if (!title) {
-    return "A";
-  }
+  const params =
+    obterParametros();
 
-  return title
-    .charAt(0)
-    .toUpperCase();
+  const tipo =
+    params.tipo;
 
-}
-
-
-/*
-  RENDERIZA
-*/
-
-function render() {
-
-  const params = getParams();
-
-  const tipo = params.tipo;
-
-  const search =
-    params.search
+  const busca =
+    params.busca
       .toLowerCase()
       .trim();
 
 
-  document
-    .getElementById("q")
-    .value = params.search;
+  let lista = [];
 
 
-  document
-    .getElementById("list-title")
-    .textContent = formatTipo(tipo);
+  /*
+   * Se existe uma categoria na URL,
+   * mostra somente aquela categoria.
+   *
+   * Se não existe categoria,
+   * mostra TODOS os sistemas.
+   */
+
+  if (tipo && systemsDB[tipo]) {
+
+    lista =
+      systemsDB[tipo].map(sistema => ({
+
+        ...sistema,
+
+        categoria: tipo
+
+      }));
+
+  } else {
+
+    lista =
+      obterTodosOsSistemas();
+
+  }
 
 
-  const list =
-    systemsDB[tipo] || [];
+  /*
+   * Filtro de pesquisa
+   */
 
+  if (busca) {
 
-  const filtered =
-    list.filter(system => {
+    lista =
+      lista.filter(sistema => {
 
-      const text =
-        (
-          system.title +
+        const texto = (
+
+          sistema.title +
           " " +
-          system.desc
+          sistema.desc +
+          " " +
+          categoryNames[sistema.categoria]
+
         ).toLowerCase();
 
-      return (
-        !search ||
-        text.includes(search)
-      );
+        return texto.includes(busca);
 
-    });
+      });
 
+  }
+
+
+  /*
+   * Cabeçalho
+   */
+
+  const categoryName =
+    tipo && categoryNames[tipo]
+      ? categoryNames[tipo]
+      : "Todos os Sistemas";
+
+
+  const categoryDescription =
+    tipo && categoryDescriptions[tipo]
+      ? categoryDescriptions[tipo]
+      : "Todos os sistemas de produção disponíveis na Pecuária.";
+
+
+  document.getElementById(
+    "category-name"
+  ).textContent =
+    categoryName;
+
+
+  document.getElementById(
+    "category-description"
+  ).textContent =
+    categoryDescription;
+
+
+  /*
+   * Contador
+   */
+
+  document.getElementById(
+    "info"
+  ).textContent =
+    lista.length === 1
+      ? "1 sistema encontrado."
+      : `${lista.length} sistemas encontrados.`;
+
+
+  /*
+   * Grid
+   */
 
   const grid =
     document.getElementById(
@@ -674,28 +741,39 @@ function render() {
   grid.innerHTML = "";
 
 
-  if (filtered.length === 0) {
+  /*
+   * Nenhum resultado
+   */
+
+  if (lista.length === 0) {
 
     grid.innerHTML = `
-      <div class="empty">
-        Nenhum sistema encontrado para esta categoria.
-      </div>
-    `;
 
-    document
-      .getElementById("subinfo")
-      .textContent =
-      "Nenhum sistema disponível.";
+      <div class="empty">
+
+        Nenhum sistema encontrado.
+
+        <br><br>
+
+        Tente outro termo de pesquisa.
+
+      </div>
+
+    `;
 
     return;
 
   }
 
 
-  filtered.forEach(system => {
+  /*
+   * Criar cartões
+   */
+
+  lista.forEach(sistema => {
 
     const card =
-      document.createElement("article");
+      document.createElement("div");
 
     card.className =
       "system-card";
@@ -703,24 +781,37 @@ function render() {
 
     card.innerHTML = `
 
-      <div class="system-type">
-        ${getInitial(system.title)}
+      <div class="system-category">
+
+        ${categoryNames[sistema.categoria]}
+
       </div>
 
-      <h3 class="system-title">
-        ${system.title}
-      </h3>
 
-      <p class="system-description">
-        ${system.desc}
-      </p>
+      <div class="system-title">
 
-      <a
-        class="open-button"
-        href="/animal-detalhe?nome=${encodeURIComponent(system.slug)}"
-      >
-        Abrir sistema
-      </a>
+        ${sistema.title}
+
+      </div>
+
+
+      <div class="system-description">
+
+        ${sistema.desc}
+
+      </div>
+
+
+      <div class="card-footer">
+
+        <button
+          class="btn btn-primary"
+          onclick="abrirSistema('${sistema.slug}')"
+        >
+          Abrir sistema
+        </button>
+
+      </div>
 
     `;
 
@@ -729,36 +820,35 @@ function render() {
 
   });
 
+}
 
-  document
-    .getElementById("subinfo")
-    .textContent =
-    `${filtered.length} sistema(s) disponível(is).`;
+
+/* =========================================================
+   ABRIR DETALHE
+   ========================================================= */
+
+function abrirSistema(slug) {
+
+  window.location.href =
+    "/animal-detalhe?nome=" +
+    encodeURIComponent(slug);
 
 }
 
 
-/*
-  FILTRO
-*/
+/* =========================================================
+   PESQUISA
+   ========================================================= */
 
-function applyFilter() {
-
-  const q =
-    document
-      .getElementById("q")
-      .value
-      .trim();
-
+function aplicarBusca() {
 
   const params =
-    new URLSearchParams(
-      window.location.search
-    );
+    obterParametros();
 
-
-  const tipo =
-    params.get("tipo") || "";
+  const busca =
+    document.getElementById(
+      "search"
+    ).value.trim();
 
 
   let url =
@@ -768,21 +858,25 @@ function applyFilter() {
   const query = [];
 
 
-  if (tipo) {
+  if (params.tipo) {
 
     query.push(
       "tipo=" +
-      encodeURIComponent(tipo)
+      encodeURIComponent(
+        params.tipo
+      )
     );
 
   }
 
 
-  if (q) {
+  if (busca) {
 
     query.push(
       "search=" +
-      encodeURIComponent(q)
+      encodeURIComponent(
+        busca
+      )
     );
 
   }
@@ -790,23 +884,57 @@ function applyFilter() {
 
   if (query.length) {
 
-    url += "?" + query.join("&");
+    url +=
+      "?" +
+      query.join("&");
 
   }
 
 
-  window.location.href = url;
+  window.location.href =
+    url;
 
 }
 
 
-/*
-  INICIALIZA
-*/
+/* =========================================================
+   ENTER NA PESQUISA
+   ========================================================= */
 
-render();
+document
+  .getElementById("search")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        aplicarBusca();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+const parametros =
+  obterParametros();
+
+
+document.getElementById(
+  "search"
+).value =
+  parametros.busca;
+
+
+renderizar();
 
 </script>
+
 
 </body>
 </html>
