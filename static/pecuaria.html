@@ -1,125 +1,625 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pecuária — ZyTerra</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>Pecuária — ZyTerra</title>
 
-    <style>
-      .ia-box {
-        margin-top: 15px;
-        padding: 20px;
-        border-left: 5px solid #163b63;
-        background: #f6f8fb;
-        border-radius: 4px;
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --blue: #163b63;
+      --page-bg: #eef4fb;
+      --text: #17324d;
+      --muted: #60758c;
+      --border: #d8e1ea;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 28px 40px 50px;
+      background: var(--page-bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1330px;
+      margin: 0 auto;
+    }
+
+    /* CABEÇALHO */
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 30px;
+    }
+
+    .header p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* NAVEGAÇÃO */
+
+    .topnav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .topnav a {
+      padding: 11px 21px;
+      border: 1px solid #cbd7e3;
+      border-radius: 24px;
+      background: var(--white);
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .topnav a.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    /* TÍTULO */
+
+    .section-title {
+      margin: 0 0 5px;
+      color: var(--blue);
+      font-size: 25px;
+    }
+
+    .section-description {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+
+    /* CARDS */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-bottom: 38px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 25px;
+      min-height: 175px;
+      box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
+    }
+
+    .module-card {
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(20, 40, 80, 0.09);
+    }
+
+    .icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+      background: #edf4fa;
+      color: var(--blue);
+
+      font-size: 23px;
+      font-weight: 700;
+
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--text);
+      font-size: 19px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 16px;
+
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* IA */
+
+    .ia-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px;
+
+      box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
+    }
+
+    .ia-section h2 {
+      margin: 0 0 6px;
+      color: var(--blue);
+      font-size: 22px;
+    }
+
+    .ia-description {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+
+      padding: 14px;
+
+      border: 1px solid #cbd7e3;
+      border-radius: 9px;
+
+      resize: vertical;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .button-row {
+      margin-top: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+
+      padding: 11px 20px;
+
+      background: var(--blue);
+      color: white;
+
+      font-size: 15px;
+
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .ia-box {
+      margin-top: 18px;
+
+      padding: 20px;
+
+      border-left: 4px solid var(--blue);
+
+      background: #f6f8fb;
+
+      border-radius: 8px;
+    }
+
+    .categoria {
+      font-weight: bold;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .markdown-body {
+      line-height: 1.6;
+    }
+
+    .spinner {
+      border: 4px solid #e5e9ee;
+      border-top: 4px solid var(--blue);
+
+      border-radius: 50%;
+
+      width: 28px;
+      height: 28px;
+
+      animation: spin 1s linear infinite;
+
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* RESPONSIVO */
+
+    @media (max-width: 900px) {
+
+      body {
+        padding: 22px 18px 40px;
       }
 
-      .categoria {
-        font-weight: bold;
-        color: #163b63;
-        margin-bottom: 10px;
+      .grid {
+        grid-template-columns: 1fr;
       }
 
-      .spinner {
-        border: 4px solid #eee;
-        border-top: 4px solid #163b63;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        animation: spin 1s linear infinite;
-        margin: 10px auto;
-      }
+    }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
+  </style>
+</head>
 
-      .markdown-body {
-        line-height: 1.6;
-      }
-    </style>
-  </head>
 
-  <body>
-    <aside class="sidebar">
-      <div class="logo">
-        <img src="/static/icons/zyterra-logo.svg" alt="ZyTerra" />
-        <span>ZyTerra</span>
+<body>
+
+<div class="container">
+
+  <!-- CABEÇALHO -->
+
+  <header class="header">
+
+    <h1>Pecuária</h1>
+
+    <p>
+      Gestão, manejo e inteligência aplicada à produção animal.
+    </p>
+
+  </header>
+
+
+  <!-- NAVEGAÇÃO -->
+
+  <nav class="topnav">
+
+    <a href="/painel">
+      Painel
+    </a>
+
+    <a href="/culturas">
+      Culturas
+    </a>
+
+    <a href="/analises">
+      Análises
+    </a>
+
+    <a class="active" href="/pecuaria">
+      Pecuária
+    </a>
+
+  </nav>
+
+
+  <!-- MÓDULO -->
+
+  <section>
+
+    <h2 class="section-title">
+      Gestão da Pecuária
+    </h2>
+
+    <p class="section-description">
+      Organize os sistemas de produção animal e acesse as ferramentas
+      técnicas do ZyTerra.
+    </p>
+
+
+    <div class="grid">
+
+
+      <!-- ANIMAIS -->
+
+      <div
+        class="card module-card"
+        onclick="location.href='/animais'"
+      >
+
+        <div class="icon">
+          A
+        </div>
+
+        <h3>
+          Animais
+        </h3>
+
+        <p>
+          Acesse as espécies e sistemas de produção
+          cadastrados no ZyTerra.
+        </p>
+
+        <a
+          class="card-link"
+          href="/animais"
+          onclick="event.stopPropagation()"
+        >
+          Acessar sistemas →
+        </a>
+
       </div>
 
-      <nav class="menu">
-        <a href="/">Painel</a>
-        <a href="/culturas">Culturas</a>
-        <a href="/analises">Análises</a>
-        <a class="active" href="/pecuaria">Pecuária</a>
-      </nav>
-    </aside>
 
-    <main class="main">
-      <h1>Pecuária — IA Experimental</h1>
-
-      <p>
-        Utilize o ZyTerra para compreender causas comuns e boas práticas na
-        pecuária. As respostas têm caráter educativo.
-      </p>
+      <!-- NUTRIÇÃO -->
 
       <div class="card">
-        <textarea
-          id="pergunta"
-          rows="4"
-          style="width: 100%"
-          placeholder="Ex: Estresse por calor prejudica o gado?"
-        ></textarea>
-        <br /><br />
-        <button id="btn-enviar" onclick="perguntarIA()">Perguntar</button>
+
+        <div class="icon">
+          N
+        </div>
+
+        <h3>
+          Nutrição
+        </h3>
+
+        <p>
+          Ferramentas de avaliação nutricional,
+          culturas utilizadas na alimentação e formulação.
+        </p>
+
       </div>
 
-      <div class="card ia-box" id="respostaBox" style="display: none">
-        <div id="categoria" class="categoria"></div>
-        <div id="textoResposta" class="markdown-body"></div>
+
+      <!-- SANIDADE -->
+
+      <div class="card">
+
+        <div class="icon">
+          S
+        </div>
+
+        <h3>
+          Sanidade
+        </h3>
+
+        <p>
+          Organização das informações sanitárias e
+          apoio à análise de situações do rebanho.
+        </p>
+
       </div>
-    </main>
 
-    <script>
-      function perguntarIA() {
-        const pergunta = document.getElementById("pergunta").value.trim();
-        const btn = document.getElementById("btn-enviar");
-        const box = document.getElementById("respostaBox");
-        const texto = document.getElementById("textoResposta");
-        const categoria = document.getElementById("categoria");
 
-        if (!pergunta) {
-          alert("Digite uma pergunta.");
-          return;
-        }
+      <!-- MANEJO -->
 
-        box.style.display = "block";
-        categoria.innerText = "";
-        texto.innerHTML = `<div class="spinner"></div><p>Processando...</p>`;
-        btn.disabled = true;
+      <div class="card">
 
-        fetch(`${window.location.origin}/api/ia/pecuaria`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pergunta }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            categoria.innerText = "Categoria: " + (data.categoria || "—");
-            texto.innerHTML = marked.parse(data.resposta || "");
-          })
-          .catch(() => {
-            texto.innerHTML = "<p>Erro ao comunicar com o sistema.</p>";
-          })
-          .finally(() => {
-            btn.disabled = false;
-          });
-      }
-    </script>
-  </body>
+        <div class="icon">
+          M
+        </div>
+
+        <h3>
+          Manejo
+        </h3>
+
+        <p>
+          Informações para apoiar decisões de manejo
+          e rotina da produção.
+        </p>
+
+      </div>
+
+
+      <!-- INSUMOS -->
+
+      <div class="card">
+
+        <div class="icon">
+          I
+        </div>
+
+        <h3>
+          Insumos de Pecuária
+        </h3>
+
+        <p>
+          Produtos e recursos relacionados à alimentação,
+          manejo e produção animal.
+        </p>
+
+      </div>
+
+
+      <!-- DESEMPENHO -->
+
+      <div class="card">
+
+        <div class="icon">
+          D
+        </div>
+
+        <h3>
+          Desempenho
+        </h3>
+
+        <p>
+          Indicadores e informações para acompanhar
+          o desempenho dos sistemas de produção.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- IA -->
+
+  <section class="ia-section">
+
+    <h2>
+      Inteligência para Pecuária
+    </h2>
+
+    <p class="ia-description">
+      Faça perguntas sobre manejo, nutrição, sanidade e desempenho
+      da produção animal.
+    </p>
+
+
+    <textarea
+      id="pergunta"
+      placeholder="Ex.: O estresse por calor pode reduzir o desempenho dos bovinos?"
+    ></textarea>
+
+
+    <div class="button-row">
+
+      <button
+        id="btn-enviar"
+        onclick="perguntarIA()"
+      >
+        Perguntar
+      </button>
+
+    </div>
+
+
+    <div
+      class="ia-box"
+      id="respostaBox"
+      style="display:none;"
+    >
+
+      <div
+        id="categoria"
+        class="categoria"
+      ></div>
+
+      <div
+        id="textoResposta"
+        class="markdown-body"
+      ></div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+function perguntarIA() {
+
+  const pergunta =
+    document
+      .getElementById("pergunta")
+      .value
+      .trim();
+
+  const btn =
+    document.getElementById("btn-enviar");
+
+  const box =
+    document.getElementById("respostaBox");
+
+  const texto =
+    document.getElementById("textoResposta");
+
+  const categoria =
+    document.getElementById("categoria");
+
+
+  if (!pergunta) {
+
+    alert("Digite uma pergunta.");
+
+    return;
+
+  }
+
+
+  box.style.display = "block";
+
+  categoria.innerText = "";
+
+  texto.innerHTML =
+    '<div class="spinner"></div><p>Processando...</p>';
+
+  btn.disabled = true;
+
+
+  fetch("/api/ia/pecuaria", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      pergunta: pergunta
+    })
+
+  })
+
+  .then(res => res.json())
+
+  .then(data => {
+
+    categoria.innerText =
+      "Categoria: " +
+      (data.categoria || "—");
+
+    texto.innerHTML =
+      marked.parse(
+        data.resposta || ""
+      );
+
+  })
+
+  .catch(() => {
+
+    texto.innerHTML =
+      "<p>Erro ao comunicar com o sistema.</p>";
+
+  })
+
+  .finally(() => {
+
+    btn.disabled = false;
+
+  });
+
+}
+
+</script>
+
+</body>
 </html>
