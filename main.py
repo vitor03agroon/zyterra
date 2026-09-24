@@ -47,11 +47,9 @@ if not SECRET_KEY:
     )
 
 ALGORITHM = "HS256"
-
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
 password_hash = PasswordHash.recommended()
-
 security = HTTPBearer()
 
 
@@ -73,7 +71,6 @@ app.add_middleware(
 # ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent
-
 STATIC_DIR = BASE_DIR / "static"
 
 app.mount(
@@ -99,9 +96,7 @@ def file_response(path: str):
 
         if full.suffix == ".json":
             with open(full, encoding="utf-8") as f:
-                return JSONResponse(
-                    content=json.load(f)
-                )
+                return JSONResponse(content=json.load(f))
 
         return FileResponse(full)
 
@@ -109,12 +104,11 @@ def file_response(path: str):
 
 
 def normalizar(texto: str) -> str:
-
     texto = texto.lower()
 
     texto = unicodedata.normalize(
         "NFD",
-        texto
+        texto,
     )
 
     texto = "".join(
@@ -131,7 +125,6 @@ def normalizar(texto: str) -> str:
 # ============================================================
 
 def criar_token(usuario_id: int):
-
     agora = datetime.utcnow()
 
     expiracao = agora + timedelta(
@@ -155,11 +148,9 @@ def obter_usuario_atual(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):
-
     token = credentials.credentials
 
     try:
-
         payload = jwt.decode(
             token,
             SECRET_KEY,
@@ -177,7 +168,6 @@ def obter_usuario_atual(
         usuario_id = int(usuario_id)
 
     except (JWTError, ValueError):
-
         raise HTTPException(
             status_code=401,
             detail="Token inválido ou expirado",
@@ -190,7 +180,6 @@ def obter_usuario_atual(
     )
 
     if not usuario:
-
         raise HTTPException(
             status_code=401,
             detail="Usuário não encontrado",
@@ -204,7 +193,6 @@ def obter_usuario_atual(
 # ============================================================
 
 class CadastroUsuario(BaseModel):
-
     nome: str
     email: str
     senha: str
@@ -212,13 +200,11 @@ class CadastroUsuario(BaseModel):
 
 
 class LoginUsuario(BaseModel):
-
     email: str
     senha: str
 
 
 class AtualizarPerfil(BaseModel):
-
     nome: str
     telefone: Optional[str] = None
 
@@ -232,7 +218,6 @@ def registrar_usuario(
     dados: CadastroUsuario,
     db: Session = Depends(get_db),
 ):
-
     email = dados.email.strip().lower()
     nome = dados.nome.strip()
 
@@ -269,9 +254,7 @@ def registrar_usuario(
     usuario = Usuario(
         nome=nome,
         email=email,
-        senha_hash=password_hash.hash(
-            dados.senha
-        ),
+        senha_hash=password_hash.hash(dados.senha),
         telefone=dados.telefone,
     )
 
@@ -300,7 +283,6 @@ def login_usuario(
     dados: LoginUsuario,
     db: Session = Depends(get_db),
 ):
-
     email = dados.email.strip().lower()
 
     usuario = (
@@ -349,7 +331,6 @@ def login_usuario(
 def obter_perfil(
     usuario: Usuario = Depends(obter_usuario_atual),
 ):
-
     return {
         "ok": True,
         "usuario": {
@@ -372,7 +353,6 @@ def atualizar_perfil(
     usuario: Usuario = Depends(obter_usuario_atual),
     db: Session = Depends(get_db),
 ):
-
     nome = dados.nome.strip()
 
     if not nome:
@@ -400,100 +380,81 @@ def atualizar_perfil(
 
 
 # ============================================================
-# ROTAS DE AUTENTICAÇÃO / INTERFACE
+# ROTAS HTML
 # ============================================================
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-
     return file_response("login.html")
 
 
 @app.get("/cadastro", response_class=HTMLResponse)
 def cadastro():
-
     return file_response("cadastro.html")
 
 
 @app.get("/painel", response_class=HTMLResponse)
 def painel():
-
     return file_response("index.html")
 
 
-# ============================================================
-# ROTAS DOS MÓDULOS
-# ============================================================
+@app.get("/perfil", response_class=HTMLResponse)
+def perfil():
+    return file_response("perfil.html")
+
 
 @app.get("/culturas", response_class=HTMLResponse)
 def culturas():
-
     return file_response("culturas.html")
-
-
-@app.get("/cultura-detalhe", response_class=HTMLResponse)
-def cultura_detalhe():
-
-    return file_response("cultura_detalhe.html")
 
 
 @app.get("/analises", response_class=HTMLResponse)
 def analises():
-
     return file_response("analises.html")
 
 
 @app.get("/pecuaria", response_class=HTMLResponse)
 def pecuaria():
-
     return file_response("pecuaria.html")
 
 
 @app.get("/animais", response_class=HTMLResponse)
 def animais():
-
     return file_response("animais.html")
 
 
 @app.get("/animal-lista", response_class=HTMLResponse)
 def animal_lista():
-
     return file_response("animal_lista.html")
 
 
 @app.get("/animal-detalhe", response_class=HTMLResponse)
 def animal_detalhe():
-
     return file_response("animal_detalhe.html")
 
 
 @app.get("/insumos", response_class=HTMLResponse)
 def insumos():
-
     return file_response("insumos.html")
 
 
 @app.get("/insumos-lista", response_class=HTMLResponse)
 def insumos_lista():
-
     return file_response("insumos_lista.html")
 
 
 @app.get("/insumo-detalhe", response_class=HTMLResponse)
 def insumo_detalhe():
-
     return file_response("insumo_detalhe.html")
 
 
 @app.get("/plantas-daninhas", response_class=HTMLResponse)
 def plantas_daninhas():
-
     return file_response("plantas_daninhas.html")
 
 
 @app.get("/planta-detalhe", response_class=HTMLResponse)
 def planta_detalhe():
-
     return file_response("planta_detalhe.html")
 
 
@@ -503,7 +464,6 @@ def planta_detalhe():
 
 @app.get("/status")
 def status():
-
     return {
         "ok": True,
         "app": "ZyTerra online",
@@ -516,17 +476,14 @@ def status():
 # ============================================================
 
 class PerguntaIA(BaseModel):
-
     pergunta: str
 
 
 @app.post("/api/ia/pecuaria")
 def ia_pecuaria(data: PerguntaIA):
-
     pergunta = normalizar(data.pergunta)
 
     categoria = "Orientação Geral"
-
     resposta_md = ""
 
     # --------------------------------------------------------
@@ -537,7 +494,6 @@ def ia_pecuaria(data: PerguntaIA):
         "calor" in pergunta
         or "estresse termico" in pergunta
     ):
-
         categoria = "Manejo / Ambiente"
 
         resposta_md = """
@@ -575,7 +531,6 @@ Pode causar:
             "mineral",
         ]
     ):
-
         categoria = "Nutrição"
 
         resposta_md = """
@@ -607,7 +562,6 @@ Uma dieta equilibrada contribui para o desempenho do rebanho.
             "diarreia",
         ]
     ):
-
         categoria = "Sanidade"
 
         resposta_md = """
@@ -638,7 +592,6 @@ Problemas sanitários podem reduzir o desempenho e aumentar perdas produtivas.
             "desempenho",
         ]
     ):
-
         categoria = "Desempenho Produtivo"
 
         resposta_md = """
@@ -660,7 +613,6 @@ A avaliação integrada é importante para identificar a causa.
     # --------------------------------------------------------
 
     else:
-
         resposta_md = """
 ### Avaliação geral na pecuária
 
@@ -694,7 +646,6 @@ Quando necessário, procure um profissional habilitado.
 
 @app.get("/{path:path}")
 def fallback(path: str):
-
     res = file_response(path)
 
     if res:
