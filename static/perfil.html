@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ZyTerra - Meu Perfil</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6f8;
+            color: #344054;
+        }
+
+        .topo {
+            height: 72px;
+            background: #163b63;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .voltar {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .titulo {
+            margin-bottom: 25px;
+        }
+
+        .titulo h1 {
+            margin: 0;
+            color: #163b63;
+        }
+
+        .titulo p {
+            color: #667085;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #163b63;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #344054;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .campo input:focus {
+            outline: none;
+            border-color: #163b63;
+        }
+
+        .campo input[readonly] {
+            background: #f2f4f7;
+            color: #667085;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .salvar {
+            background: #163b63;
+            color: white;
+        }
+
+        .salvar:hover {
+            background: #102d4b;
+        }
+
+        .sair {
+            background: #f2f4f7;
+            color: #344054;
+        }
+
+        .sair:hover {
+            background: #e4e7ec;
+        }
+
+        #mensagem {
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .info {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+
+            .topo {
+                padding: 0 20px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .acoes {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header class="topo">
+
+        <div class="logo">
+            ZyTerra
+        </div>
+
+        <a
+            href="/painel"
+            class="voltar"
+        >
+            Voltar ao painel
+        </a>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="titulo">
+
+            <h1>Meu Perfil</h1>
+
+            <p>
+                Gerencie seus dados de acesso ao ZyTerra.
+            </p>
+
+        </div>
+
+
+        <section class="card">
+
+            <div
+                class="avatar"
+                id="avatar"
+            >
+                Z
+            </div>
+
+
+            <form id="perfilForm">
+
+                <div class="campo">
+
+                    <label for="nome">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="telefone">
+                        Telefone
+                    </label>
+
+                    <input
+                        type="text"
+                        id="telefone"
+                        placeholder="(62) 99999-9999"
+                    >
+
+                </div>
+
+
+                <div class="acoes">
+
+                    <button
+                        type="submit"
+                        class="salvar"
+                    >
+                        Salvar alterações
+                    </button>
+
+                    <button
+                        type="button"
+                        class="sair"
+                        id="btnSair"
+                    >
+                        Sair da conta
+                    </button>
+
+                </div>
+
+
+                <div id="mensagem"></div>
+
+            </form>
+
+        </section>
+
+
+        <section class="card">
+
+            <h3>Conta</h3>
+
+            <p
+                class="info"
+                id="criadoEm"
+            >
+                Carregando informações...
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script src="/static/js/auth.js"></script>
+
+
+    <script>
+
+        async function carregarPerfil() {
+
+            const usuario = await obterPerfil();
+
+            if (!usuario) {
+                return;
+            }
+
+            document.getElementById("nome").value =
+                usuario.nome || "";
+
+            document.getElementById("email").value =
+                usuario.email || "";
+
+            document.getElementById("telefone").value =
+                usuario.telefone || "";
+
+            const inicial =
+                (usuario.nome || "Z")
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase();
+
+            document.getElementById("avatar").textContent =
+                inicial;
+
+            if (usuario.criado_em) {
+
+                const data = new Date(
+                    usuario.criado_em
+                );
+
+                document.getElementById("criadoEm").textContent =
+                    "Conta criada em " +
+                    data.toLocaleDateString("pt-BR");
+
+            } else {
+
+                document.getElementById("criadoEm").textContent =
+                    "Conta ativa no ZyTerra.";
+
+            }
+        }
+
+
+        document
+            .getElementById("perfilForm")
+            .addEventListener(
+                "submit",
+                async function(event) {
+
+                    event.preventDefault();
+
+                    const nome =
+                        document
+                            .getElementById("nome")
+                            .value
+                            .trim();
+
+                    const telefone =
+                        document
+                            .getElementById("telefone")
+                            .value
+                            .trim();
+
+                    const mensagem =
+                        document.getElementById(
+                            "mensagem"
+                        );
+
+                    mensagem.style.color = "#667085";
+
+                    mensagem.textContent =
+                        "Salvando...";
+
+                    try {
+
+                        const usuario =
+                            await atualizarPerfil(
+                                nome,
+                                telefone
+                            );
+
+                        if (!usuario) {
+                            return;
+                        }
+
+                        mensagem.style.color =
+                            "#027a48";
+
+                        mensagem.textContent =
+                            "Perfil atualizado com sucesso.";
+
+                        const inicial =
+                            usuario.nome
+                                .trim()
+                                .charAt(0)
+                                .toUpperCase();
+
+                        document
+                            .getElementById("avatar")
+                            .textContent = inicial;
+
+                    } catch (erro) {
+
+                        mensagem.style.color =
+                            "#b42318";
+
+                        mensagem.textContent =
+                            erro.message;
+
+                    }
+
+                }
+            );
+
+
+        document
+            .getElementById("btnSair")
+            .addEventListener(
+                "click",
+                function() {
+
+                    sair();
+
+                }
+            );
+
+
+        carregarPerfil();
+
+    </script>
+
+</body>
+
+</html>
