@@ -85,22 +85,41 @@ app.mount(
 # ============================================================
 
 def file_response(path: str):
+    """
+    Retorna arquivos existentes dentro de static/.
+    """
     full = STATIC_DIR / path
 
-    if full.is_file():
+    if not full.is_file():
+        return None
 
-        if full.suffix == ".html":
-            return HTMLResponse(
-                full.read_text(encoding="utf-8")
-            )
+    if full.suffix == ".html":
+        return HTMLResponse(full.read_text(encoding="utf-8"))
 
-        if full.suffix == ".json":
-            with open(full, encoding="utf-8") as f:
-                return JSONResponse(content=json.load(f))
+    if full.suffix == ".json":
+        with open(full, encoding="utf-8") as f:
+            return JSONResponse(content=json.load(f))
 
-        return FileResponse(full)
+    return FileResponse(full)
 
-    return None
+
+def json_response_from_static(path: str):
+    full = STATIC_DIR / path
+
+    if not full.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail=f"Arquivo de dados não encontrado: {path}",
+        )
+
+    try:
+        with open(full, encoding="utf-8") as f:
+            return JSONResponse(content=json.load(f))
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Arquivo JSON inválido: {path}",
+        )
 
 
 def normalizar(texto: str) -> str:
@@ -111,13 +130,11 @@ def normalizar(texto: str) -> str:
         texto,
     )
 
-    texto = "".join(
+    return "".join(
         c
         for c in texto
         if unicodedata.category(c) != "Mn"
     )
-
-    return texto
 
 
 # ============================================================
@@ -189,7 +206,7 @@ def obter_usuario_atual(
 
 
 # ============================================================
-# MODELOS DE USUÁRIO
+# MODELOS
 # ============================================================
 
 class CadastroUsuario(BaseModel):
@@ -209,8 +226,12 @@ class AtualizarPerfil(BaseModel):
     telefone: Optional[str] = None
 
 
+class PerguntaIA(BaseModel):
+    pergunta: str
+
+
 # ============================================================
-# CADASTRO
+# AUTENTICAÇÃO
 # ============================================================
 
 @app.post("/api/auth/register")
@@ -273,10 +294,6 @@ def registrar_usuario(
         },
     }
 
-
-# ============================================================
-# LOGIN
-# ============================================================
 
 @app.post("/api/auth/login")
 def login_usuario(
@@ -343,10 +360,6 @@ def obter_perfil(
     }
 
 
-# ============================================================
-# ATUALIZAR PERFIL
-# ============================================================
-
 @app.put("/api/perfil")
 def atualizar_perfil(
     dados: AtualizarPerfil,
@@ -380,7 +393,7 @@ def atualizar_perfil(
 
 
 # ============================================================
-# ROTAS HTML
+# ROTAS PRINCIPAIS
 # ============================================================
 
 @app.get("/", response_class=HTMLResponse)
@@ -403,15 +416,61 @@ def perfil():
     return file_response("perfil.html")
 
 
+# ============================================================
+# CULTURAS
+# ============================================================
+
 @app.get("/culturas", response_class=HTMLResponse)
 def culturas():
     return file_response("culturas.html")
 
 
+@app.get("/cultura", response_class=HTMLResponse)
+def cultura():
+    return file_response("cultura_detalhe.html")
+
+
+@app.get("/cultura-detalhe", response_class=HTMLResponse)
+def cultura_detalhe():
+    return file_response("cultura_detalhe.html")
+
+
+# ============================================================
+# ANÁLISES
+# ============================================================
+
 @app.get("/analises", response_class=HTMLResponse)
 def analises():
     return file_response("analises.html")
 
+
+# ============================================================
+# INSUMOS AGRÍCOLAS
+# ============================================================
+
+@app.get("/insumos", response_class=HTMLResponse)
+def insumos():
+    return file_response("insumos.html")
+
+
+@app.get("/insumos/lista", response_class=HTMLResponse)
+def insumos_lista_compatibilidade():
+    return file_response("insumos_lista.html")
+
+
+@app.get("/insumos-lista", response_class=HTMLResponse)
+def insumos_lista():
+    return file_response("insumos_lista.html")
+
+
+@app.get("/insumo-detalhe", response_class=HTMLResponse)
+def insumo_detalhe():
+    return file_response("insumo_detalhe.html")
+
+
+# ============================================================
+# PECUÁRIA
+# ============================================================
 
 @app.get("/pecuaria", response_class=HTMLResponse)
 def pecuaria():
@@ -433,20 +492,10 @@ def animal_detalhe():
     return file_response("animal_detalhe.html")
 
 
-@app.get("/insumos", response_class=HTMLResponse)
-def insumos():
-    return file_response("insumos.html")
-
-
-@app.get("/insumos-lista", response_class=HTMLResponse)
-def insumos_lista():
-    return file_response("insumos_lista.html")
-
-
-@app.get("/insumo-detalhe", response_class=HTMLResponse)
-def insumo_detalhe():
-    return file_response("insumo_detalhe.html")
-
+# ============================================================
+# PLANTAS DANINHAS
+# Integração futura dentro do módulo de Culturas
+# ============================================================
 
 @app.get("/plantas-daninhas", response_class=HTMLResponse)
 def plantas_daninhas():
@@ -456,6 +505,56 @@ def plantas_daninhas():
 @app.get("/planta-detalhe", response_class=HTMLResponse)
 def planta_detalhe():
     return file_response("planta_detalhe.html")
+
+
+# ============================================================
+# APIs DE DADOS
+# O frontend passa a consultar uma única fonte de dados.
+# ============================================================
+
+@app.get("/api/culturas")
+def api_culturas():
+    return json_response_from_static("data/culturas.json")
+
+
+@app.get("/api/plantas-daninhas")
+def api_plantas_daninhas():
+    return json_response_from_static("data/plantas_daninhas.json")
+
+
+@app.get("/api/insumos-agricolas")
+def api_insumos_agricolas():
+    return json_response_from_static("data/insumos_agricolas.json")
+
+
+@app.get("/api/alvos/doencas")
+def api_alvos_doencas():
+    return json_response_from_static("data/alvos_doencas.json")
+
+
+@app.get("/api/alvos/pragas")
+def api_alvos_pragas():
+    return json_response_from_static("data/alvos_pragas.json")
+
+
+@app.get("/api/compatibilidade/culturas")
+def api_compatibilidade_culturas():
+    return json_response_from_static("data/compat_culturas.json")
+
+
+@app.get("/api/referencia/hrac")
+def api_hrac():
+    return json_response_from_static("data/hrac.json")
+
+
+@app.get("/api/referencia/frac")
+def api_frac():
+    return json_response_from_static("data/frac.json")
+
+
+@app.get("/api/referencia/irac")
+def api_irac():
+    return json_response_from_static("data/irac.json")
 
 
 # ============================================================
@@ -472,23 +571,16 @@ def status():
 
 
 # ============================================================
-# IA PECUÁRIA — EDUCATIVA
+# IA PECUÁRIA
+# Temporária: lógica educativa existente.
+# A integração de IA conversacional será feita depois.
 # ============================================================
-
-class PerguntaIA(BaseModel):
-    pergunta: str
-
 
 @app.post("/api/ia/pecuaria")
 def ia_pecuaria(data: PerguntaIA):
     pergunta = normalizar(data.pergunta)
 
     categoria = "Orientação Geral"
-    resposta_md = ""
-
-    # --------------------------------------------------------
-    # ESTRESSE TÉRMICO / AMBIENTE
-    # --------------------------------------------------------
 
     if (
         "calor" in pergunta
@@ -514,10 +606,6 @@ Pode causar:
 - Água limpa e fresca em abundância
 - Manejo nos horários mais frescos do dia
 """
-
-    # --------------------------------------------------------
-    # NUTRIÇÃO
-    # --------------------------------------------------------
 
     elif any(
         p in pergunta
@@ -547,10 +635,6 @@ Problemas nutricionais podem afetar diretamente o desempenho produtivo.
 Uma dieta equilibrada contribui para o desempenho do rebanho.
 """
 
-    # --------------------------------------------------------
-    # SANIDADE
-    # --------------------------------------------------------
-
     elif any(
         p in pergunta
         for p in [
@@ -575,10 +659,6 @@ Problemas sanitários podem reduzir o desempenho e aumentar perdas produtivas.
 - Vacinação conforme calendário
 - Monitoramento clínico do rebanho
 """
-
-    # --------------------------------------------------------
-    # PESO / DESEMPENHO
-    # --------------------------------------------------------
 
     elif any(
         p in pergunta
@@ -608,10 +688,6 @@ Alterações no ganho ou perda de peso podem estar relacionadas a:
 A avaliação integrada é importante para identificar a causa.
 """
 
-    # --------------------------------------------------------
-    # FALLBACK
-    # --------------------------------------------------------
-
     else:
         resposta_md = """
 ### Avaliação geral na pecuária
@@ -630,7 +706,7 @@ Quando necessário, procure um profissional habilitado.
 
     resposta_md += (
         "\n\n"
-        "⚠️ *As informações são educativas e não substituem "
+        "*As informações são educativas e não substituem "
         "a avaliação de um profissional habilitado.*"
     )
 
@@ -642,6 +718,7 @@ Quando necessário, procure um profissional habilitado.
 
 # ============================================================
 # FALLBACK
+# Deve ficar por último.
 # ============================================================
 
 @app.get("/{path:path}")
