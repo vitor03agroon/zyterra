@@ -2,18 +2,112 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Animais — ZyTerra</title>
 
 <style>
-  body { background:#eef4fb; margin:0; font-family:Arial; }
-  .main { margin-left:240px; padding:30px; }
-  h1 { color:#163b63; }
-  .card {
-    background:#fff;
-    margin:12px 0;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  :root {
+    --zy-blue: #163b63;
+    --zy-blue-dark: #0f2f4d;
+    --zy-green: #3f7d4a;
+    --bg: #eef4fb;
+    --white: #ffffff;
+    --border: #dfe8f2;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--bg);
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #243447;
+  }
+
+  .main {
+    margin-left: 240px;
+    padding: 35px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .page-header h1 {
+    margin: 0;
+    color: var(--zy-blue);
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .page-header p {
+    margin: 8px 0 0;
+    color: #60758a;
+    font-size: 15px;
+  }
+
+  .section-title {
+    color: var(--zy-blue-dark);
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 15px;
+  }
+
+  .animals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .animal-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    min-height: 145px;
+    cursor: pointer;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .animal-card:hover {
+    transform: translateY(-3px);
+    border-color: #b9cde0;
+    box-shadow: 0 10px 25px rgba(22, 59, 99, 0.10);
+  }
+
+  .animal-card h3 {
+    margin: 0 0 9px;
+    color: var(--zy-blue);
+    font-size: 18px;
+  }
+
+  .animal-card p {
+    margin: 0;
+    color: #64788c;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .animal-card .access {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--zy-green);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .main {
+      margin-left: 0;
+      padding: 20px;
+    }
   }
 </style>
 </head>
@@ -21,17 +115,180 @@
 <body>
 
 <div class="main">
-  <h1>🐖 Animais</h1>
 
-  <div class="card">Bovinos</div>
-  <div class="card">Suínos</div>
-  <div class="card">Aves</div>
+  <div class="page-header">
+    <h1>Animais</h1>
+    <p>
+      Selecione o sistema de produção para consultar informações,
+      manejo, nutrição, sanidade e desempenho.
+    </p>
+  </div>
+
+  <div class="section-title">
+    Sistemas de produção
+  </div>
+
+  <div class="animals-grid">
+
+    <!-- BOVINOS DE CORTE -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('bovinos-corte')"
+    >
+      <h3>Bovinos de Corte</h3>
+      <p>
+        Sistemas de confinamento, recria e engorda.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- BOVINOS DE LEITE -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('bovinos-leite')"
+    >
+      <h3>Bovinos de Leite</h3>
+      <p>
+        Sistemas de pastoreio e produção intensiva.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- SUÍNOS -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('suinos')"
+    >
+      <h3>Suínos</h3>
+      <p>
+        Sistemas de produção, creche e terminação.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- AVES -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('aves')"
+    >
+      <h3>Aves</h3>
+      <p>
+        Frango de corte e produção de ovos.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- OVINOS -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('ovinos')"
+    >
+      <h3>Ovinos</h3>
+      <p>
+        Sistemas de criação em pasto e recria.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- CAPRINOS -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('caprinos')"
+    >
+      <h3>Caprinos</h3>
+      <p>
+        Sistemas de criação de caprinos leiteiros.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- EQUINOS -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('equinos')"
+    >
+      <h3>Equinos</h3>
+      <p>
+        Manejo de equinos de trabalho e desporto.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+
+    <!-- COELHOS -->
+    <div
+      class="animal-card"
+      onclick="abrirCategoria('coelhos')"
+    >
+      <h3>Coelhos</h3>
+      <p>
+        Sistemas de produção e manejo de coelhos.
+      </p>
+      <span class="access">Acessar sistemas →</span>
+    </div>
+
+  </div>
+
 </div>
 
+
 <script>
-fetch("/static/layout/sidebar.html")
-  .then(r => r.text())
-  .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+
+  /*
+   * Abre o animal_lista.html informando
+   * qual categoria foi selecionada.
+   *
+   * Exemplos:
+   *
+   * /animal-lista?tipo=bovinos-corte
+   * /animal-lista?tipo=suinos
+   * /animal-lista?tipo=aves
+   */
+
+  function abrirCategoria(tipo) {
+    window.location.href =
+      "/animal-lista?tipo=" + encodeURIComponent(tipo);
+  }
+
+
+  /*
+   * Carrega a barra lateral do ZyTerra.
+   */
+
+  fetch("/static/layout/sidebar.html")
+    .then(response => {
+
+      if (!response.ok) {
+        throw new Error(
+          "Não foi possível carregar a barra lateral."
+        );
+      }
+
+      return response.text();
+    })
+    .then(html => {
+
+      document.body.insertAdjacentHTML(
+        "afterbegin",
+        html
+      );
+
+    })
+    .catch(error => {
+
+      console.warn(
+        "Sidebar não carregada:",
+        error
+      );
+
+    });
+
 </script>
 
 </body>
