@@ -1,952 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>ZyTerra - Painel</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            font-family: Arial, sans-serif;
-
-            margin: 0;
-
-            padding: 0;
-
-            background: #f2f6f9;
-
-            color: #17324a;
-
-        }
-
-
-        /* ==================================================
-           CABEÇALHO
-        ================================================== */
-
-        .header {
-
-            background: #163b63;
-
-            color: white;
-
-            padding: 18px 35px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 20px;
-
-        }
-
-
-        .brand {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-        }
-
-
-        .brand-name {
-
-            font-size: 25px;
-
-            font-weight: 700;
-
-            letter-spacing: .3px;
-
-        }
-
-
-        .brand-subtitle {
-
-            font-size: 12px;
-
-            opacity: .8;
-
-            margin-top: 3px;
-
-        }
-
-
-        /* ==================================================
-           USUÁRIO
-        ================================================== */
-
-        .user-area {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-        }
-
-
-        .user-info {
-
-            text-align: right;
-
-        }
-
-
-        .user-name {
-
-            font-size: 14px;
-
-            font-weight: bold;
-
-        }
-
-
-        .user-email {
-
-            font-size: 11px;
-
-            opacity: .75;
-
-            margin-top: 3px;
-
-        }
-
-
-        .avatar {
-
-            width: 42px;
-
-            height: 42px;
-
-            border-radius: 50%;
-
-            background: white;
-
-            color: #163b63;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 18px;
-
-            font-weight: bold;
-
-        }
-
-
-        .user-actions {
-
-            display: flex;
-
-            gap: 8px;
-
-        }
-
-
-        .user-actions button {
-
-            border: 1px solid rgba(255,255,255,.3);
-
-            background: rgba(255,255,255,.08);
-
-            color: white;
-
-            border-radius: 7px;
-
-            padding: 8px 12px;
-
-            cursor: pointer;
-
-            font-size: 12px;
-
-        }
-
-
-        .user-actions button:hover {
-
-            background: white;
-
-            color: #163b63;
-
-        }
-
-
-        /* ==================================================
-           CONTEÚDO
-        ================================================== */
-
-        .container {
-
-            width: 100%;
-
-            max-width: 1150px;
-
-            margin: 0 auto;
-
-            padding: 35px 20px 50px;
-
-        }
-
-
-        .welcome {
-
-            margin-bottom: 30px;
-
-        }
-
-
-        .welcome h1 {
-
-            margin: 0;
-
-            color: #163b63;
-
-            font-size: 30px;
-
-        }
-
-
-        .welcome p {
-
-            margin-top: 8px;
-
-            color: #667085;
-
-            font-size: 15px;
-
-        }
-
-
-        /* ==================================================
-           NAVEGAÇÃO
-        ================================================== */
-
-        .topnav {
-
-            display: flex;
-
-            gap: 8px;
-
-            margin-bottom: 30px;
-
-            flex-wrap: wrap;
-
-        }
-
-
-        .topnav button {
-
-            padding: 9px 17px;
-
-            border-radius: 20px;
-
-            border: 1px solid #d0d7e2;
-
-            background: white;
-
-            cursor: pointer;
-
-            font-size: 13px;
-
-            color: #344054;
-
-            transition: .2s;
-
-        }
-
-
-        .topnav button:hover {
-
-            background: #163b63;
-
-            color: white;
-
-            border-color: #163b63;
-
-        }
-
-
-        .topnav .active {
-
-            background: #163b63;
-
-            color: white;
-
-            border-color: #163b63;
-
-        }
-
-
-        /* ==================================================
-           SEÇÃO
-        ================================================== */
-
-        .section-title {
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .section-title h2 {
-
-            margin: 0;
-
-            font-size: 20px;
-
-            color: #163b63;
-
-        }
-
-
-        .section-title p {
-
-            margin: 5px 0 0;
-
-            color: #667085;
-
-            font-size: 13px;
-
-        }
-
-
-        /* ==================================================
-           GRID
-        ================================================== */
-
-        .grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(210px, 1fr)
-                );
-
-            gap: 18px;
-
-        }
-
-
-        /* ==================================================
-           CARD
-        ================================================== */
-
-        .card {
-
-            background: white;
-
-            padding: 28px 22px;
-
-            border-radius: 14px;
-
-            border: 1px solid #e4e7ec;
-
-            box-shadow:
-                0 5px 15px
-                rgba(20,40,80,.04);
-
-            cursor: pointer;
-
-            transition:
-                transform .15s ease,
-                box-shadow .15s ease,
-                border-color .15s ease;
-
-            min-height: 145px;
-
-        }
-
-
-        .card:hover {
-
-            transform: translateY(-4px);
-
-            box-shadow:
-                0 12px 28px
-                rgba(20,40,80,.08);
-
-            border-color: #c9d5e3;
-
-        }
-
-
-        .card-icon {
-
-            width: 48px;
-
-            height: 48px;
-
-            border-radius: 10px;
-
-            background: #edf3f8;
-
-            color: #163b63;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 21px;
-
-            font-weight: bold;
-
-        }
-
-
-        .label {
-
-            margin-top: 16px;
-
-            font-size: 17px;
-
-            color: #17324a;
-
-            font-weight: 700;
-
-        }
-
-
-        .description {
-
-            margin-top: 5px;
-
-            color: #667085;
-
-            font-size: 12px;
-
-        }
-
-
-        /* ==================================================
-           FOOTER
-        ================================================== */
-
-        .footer {
-
-            text-align: center;
-
-            margin-top: 45px;
-
-            color: #98a2b3;
-
-            font-size: 12px;
-
-        }
-
-
-        /* ==================================================
-           MOBILE
-        ================================================== */
-
-        @media (max-width: 700px) {
-
-            .header {
-
-                padding: 15px 20px;
-
-                align-items: flex-start;
-
-            }
-
-
-            .user-info {
-
-                display: none;
-
-            }
-
-
-            .brand-subtitle {
-
-                display: none;
-
-            }
-
-
-            .user-actions {
-
-                flex-direction: column;
-
-            }
-
-
-            .container {
-
-                padding-top: 25px;
-
-            }
-
-
-            .welcome h1 {
-
-                font-size: 25px;
-
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZyTerra — Painel</title>
+
+  <style>
+    :root {
+      --blue: #163b63;
+      --page-bg: #eef4fb;
+      --text: #17324d;
+      --muted: #60758c;
+      --border: #d8e1ea;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 28px 40px 50px;
+      background: var(--page-bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+    }
+
+    .top {
+      max-width: 1330px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 30px;
+    }
+
+    .subtitle {
+      margin: 6px 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .topnav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .topnav a {
+      padding: 11px 21px;
+      border: 1px solid #cbd7e3;
+      border-radius: 24px;
+      background: var(--white);
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .topnav a.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .section-title {
+      margin: 0 0 5px;
+      color: var(--blue);
+      font-size: 25px;
+    }
+
+    .section-description {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      min-height: 190px;
+      box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(20, 40, 80, 0.09);
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: #edf4fa;
+      color: var(--blue);
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--text);
+      font-size: 20px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      body {
+        padding: 22px 18px 40px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <div class="top">
 
-<!-- ======================================================
-     CABEÇALHO
-====================================================== -->
+    <h1>Bem-vindo ao ZyTerra</h1>
 
-<header class="header">
-
-
-    <div class="brand">
-
-        <div>
-
-            <div class="brand-name">
-                ZyTerra
-            </div>
-
-            <div class="brand-subtitle">
-                Inteligência estratégica rural
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="user-area">
-
-
-        <div class="user-info">
-
-            <div
-                class="user-name"
-                id="userName"
-            >
-                Carregando...
-            </div>
-
-            <div
-                class="user-email"
-                id="userEmail"
-            >
-                ...
-            </div>
-
-        </div>
-
-
-        <div
-            class="avatar"
-            id="userAvatar"
-        >
-            Z
-        </div>
-
-
-        <div class="user-actions">
-
-            <button
-                onclick="window.location.href='/perfil'"
-            >
-                Meu Perfil
-            </button>
-
-
-            <button
-                onclick="sair()"
-            >
-                Sair
-            </button>
-
-        </div>
-
-
-    </div>
-
-</header>
-
-
-<!-- ======================================================
-     CONTEÚDO
-====================================================== -->
-
-<main class="container">
-
-
-    <section class="welcome">
-
-        <h1 id="welcomeTitle">
-            Bem-vindo ao ZyTerra
-        </h1>
-
-        <p>
-            Gestão, dados e inteligência para a realidade rural.
-        </p>
-
-    </section>
-
-
-    <!-- ==================================================
-         NAVEGAÇÃO
-    ================================================== -->
+    <p class="subtitle">
+      Gestão, dados e inteligência para a realidade rural.
+    </p>
 
     <nav class="topnav">
-
-
-        <button
-            class="active"
-            onclick="window.location.href='/painel'"
-        >
-            Painel
-        </button>
-
-
-        <button
-            onclick="window.location.href='/culturas'"
-        >
-            Culturas
-        </button>
-
-
-        <button
-            onclick="window.location.href='/insumos'"
-        >
-            Insumos Agrícolas
-        </button>
-
-
-        <button
-            onclick="window.location.href='/pecuaria'"
-        >
-            Pecuária
-        </button>
-
-
-        <button
-            onclick="window.location.href='/plantas-daninhas'"
-        >
-            Plantas Daninhas
-        </button>
-
-
+      <a class="active" href="/painel">Painel</a>
+      <a href="/culturas">Culturas</a>
+      <a href="/analises">Análises</a>
+      <a href="/pecuaria">Pecuária</a>
     </nav>
-
-
-    <!-- ==================================================
-         MÓDULOS
-    ================================================== -->
 
     <section>
 
+      <h2 class="section-title">
+        Módulos do ZyTerra
+      </h2>
 
-        <div class="section-title">
+      <p class="section-description">
+        Acesse as ferramentas e informações da plataforma.
+      </p>
 
-            <h2>
-                Módulos do ZyTerra
-            </h2>
+      <div class="grid">
 
-            <p>
-                Acesse as ferramentas e informações da plataforma.
-            </p>
+        <!-- CULTURAS -->
+        <div class="card" onclick="location.href='/culturas'">
+
+          <div class="icon">
+            C
+          </div>
+
+          <h3>
+            Culturas
+          </h3>
+
+          <p>
+            Informações e manejo das culturas agrícolas,
+            incluindo plantas daninhas.
+          </p>
+
+        </div>
+
+
+        <!-- ANÁLISES -->
+        <div class="card" onclick="location.href='/analises'">
+
+          <div class="icon">
+            A
+          </div>
+
+          <h3>
+            Análises
+          </h3>
+
+          <p>
+            Dados e análises para apoio à decisão,
+            integrados às necessidades e aos insumos agrícolas.
+          </p>
 
         </div>
 
 
-        <div class="grid">
+        <!-- PECUÁRIA -->
+        <div class="card" onclick="location.href='/pecuaria'">
 
+          <div class="icon">
+            P
+          </div>
 
-            <!-- CULTURAS -->
+          <h3>
+            Pecuária
+          </h3>
 
-            <div
-                class="card"
-                onclick="location.href='/culturas'"
-            >
-
-                <div class="card-icon">
-                    C
-                </div>
-
-                <div class="label">
-                    Culturas
-                </div>
-
-                <div class="description">
-                    Informações e manejo das culturas agrícolas.
-                </div>
-
-            </div>
-
-
-            <!-- PLANTAS DANINHAS -->
-
-            <div
-                class="card"
-                onclick="location.href='/plantas-daninhas'"
-            >
-
-                <div class="card-icon">
-                    PD
-                </div>
-
-                <div class="label">
-                    Plantas daninhas
-                </div>
-
-                <div class="description">
-                    Identificação e informações sobre plantas daninhas.
-                </div>
-
-            </div>
-
-
-            <!-- ANÁLISES -->
-
-            <div
-                class="card"
-                onclick="location.href='/analises'"
-            >
-
-                <div class="card-icon">
-                    A
-                </div>
-
-                <div class="label">
-                    Análises
-                </div>
-
-                <div class="description">
-                    Dados e análises para apoio à decisão.
-                </div>
-
-            </div>
-
-
-            <!-- INSUMOS -->
-
-            <div
-                class="card"
-                onclick="location.href='/insumos'"
-            >
-
-                <div class="card-icon">
-                    IA
-                </div>
-
-                <div class="label">
-                    Insumos agrícolas
-                </div>
-
-                <div class="description">
-                    Consulta e organização de insumos agrícolas.
-                </div>
-
-            </div>
-
-
-            <!-- MÁQUINAS -->
-
-            <div
-                class="card"
-                onclick="alert('Em breve: Máquinas')"
-            >
-
-                <div class="card-icon">
-                    M
-                </div>
-
-                <div class="label">
-                    Máquinas
-                </div>
-
-                <div class="description">
-                    Gestão de máquinas e equipamentos.
-                </div>
-
-            </div>
-
-
-            <!-- ANIMAIS -->
-
-            <div
-                class="card"
-                onclick="location.href='/animais'"
-            >
-
-                <div class="card-icon">
-                    AN
-                </div>
-
-                <div class="label">
-                    Animais
-                </div>
-
-                <div class="description">
-                    Cadastro e acompanhamento do rebanho.
-                </div>
-
-            </div>
-
-
-            <!-- FERRAMENTAS -->
-
-            <div
-                class="card"
-                onclick="alert('Em breve: Ferramentas')"
-            >
-
-                <div class="card-icon">
-                    F
-                </div>
-
-                <div class="label">
-                    Ferramentas
-                </div>
-
-                <div class="description">
-                    Ferramentas e cálculos para o campo.
-                </div>
-
-            </div>
-
-
-            <!-- PECUÁRIA -->
-
-            <div
-                class="card"
-                onclick="location.href='/pecuaria'"
-            >
-
-                <div class="card-icon">
-                    P
-                </div>
-
-                <div class="label">
-                    Pecuária
-                </div>
-
-                <div class="description">
-                    Manejo e inteligência aplicada à pecuária.
-                </div>
-
-            </div>
-
+          <p>
+            Gestão, manejo e inteligência aplicada à produção animal,
+            com animais e insumos de pecuária integrados.
+          </p>
 
         </div>
+
+      </div>
 
     </section>
 
-
-    <div class="footer">
-
-        ZyTerra — Inteligência estratégica rural
-
-    </div>
-
-
-</main>
-
-
-<!-- ======================================================
-     AUTENTICAÇÃO
-====================================================== -->
-
-<script src="/static/js/auth.js"></script>
-
-
-<script>
-
-
-    async function carregarUsuario() {
-
-
-        const usuario =
-            await obterPerfil();
-
-
-        if (!usuario) {
-
-            return;
-
-        }
-
-
-        const nome =
-            usuario.nome || "Usuário";
-
-
-        const email =
-            usuario.email || "";
-
-
-        document
-            .getElementById("userName")
-            .textContent = nome;
-
-
-        document
-            .getElementById("userEmail")
-            .textContent = email;
-
-
-        document
-            .getElementById("welcomeTitle")
-            .textContent =
-                `Bem-vindo, ${nome}`;
-
-
-        const inicial =
-            nome
-                .trim()
-                .charAt(0)
-                .toUpperCase();
-
-
-        document
-            .getElementById("userAvatar")
-            .textContent =
-                inicial || "Z";
-
-    }
-
-
-    carregarUsuario();
-
-
-</script>
-
+  </div>
 
 </body>
-
 </html>
